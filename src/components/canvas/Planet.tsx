@@ -233,10 +233,10 @@ export function Planet({
       {isXRayMode && isActive && (
         <>
           {getXRayLayers(id, size).map((layer, index) => {
-            const startPoint = new THREE.Vector3(layer.radius, 0, 0);
-            const lineX = size * 1.5 + (index * size * 0.4);
-            const lineY = layer.radius * 0.8;
-            const endPoint = new THREE.Vector3(lineX, lineY, 0);
+            // Start at the cut face (X=0) at the top edge of the layer (Y=layer.radius)
+            const startPoint = new THREE.Vector3(0, layer.radius, 0);
+            // Extend horizontally to the right into the empty clipped space (positive X)
+            const endPoint = new THREE.Vector3(size * 0.3 + (index * size * 0.1), layer.radius, 0);
             
             return (
               <mesh key={index}>
@@ -252,9 +252,9 @@ export function Planet({
                 <Line
                   points={[startPoint, endPoint]}
                   color={index === 0 ? "#888888" : index === 1 ? "#ffaa00" : "#ffffff"}
-                  lineWidth={1.5}
+                  lineWidth={2}
                   transparent
-                  opacity={0.6}
+                  opacity={0.8}
                 />
 
                 {/* External Label */}
