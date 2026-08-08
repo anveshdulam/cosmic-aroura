@@ -2,7 +2,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { useScroll, OrbitControls } from "@react-three/drei";
 import { useJourneyStore } from "@/store/journeyStore";
 import * as THREE from "three";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 
 export const planetData = [
   {
@@ -269,6 +269,18 @@ export function JourneyController() {
   const setActivePlanet = useJourneyStore((state) => state.setActivePlanet);
   const isXRayMode = useJourneyStore((state) => state.isXRayMode);
   const activePlanetId = useJourneyStore((state) => state.activePlanetId);
+  const setScrollTo = useJourneyStore((state) => state.setScrollTo);
+
+  useEffect(() => {
+    // Register the smooth scrolling function to the global store
+    setScrollTo((offset: number) => {
+      // scroll.el is the DOM element created by ScrollControls
+      scroll.el.scrollTo({
+        top: offset * scroll.el.scrollHeight,
+        behavior: "smooth",
+      });
+    });
+  }, [scroll, setScrollTo]);
 
   // Cinematic 3D Spline Curve for Camera
   const curve = useMemo(() => {

@@ -13,6 +13,32 @@ interface PlanetProps {
   moonCount?: number;
 }
 
+const getXRayLayers = (id: string, size: number) => {
+  const gasGiants = ["jupiter", "saturn"];
+  const iceGiants = ["uranus", "neptune"];
+  
+  if (gasGiants.includes(id)) {
+    return [
+      { radius: size * 0.9, color: "#112233", emissive: "#000000", label: "Molecular Hydrogen", pos: size * 0.9, intensity: 0 },
+      { radius: size * 0.6, color: "#4455aa", emissive: "#112255", label: "Metallic Hydrogen", pos: size * 0.6, intensity: 1 },
+      { radius: size * 0.2, color: "#ffeedd", emissive: "#ccaa88", label: "Rocky/Ice Core", pos: size * 0.2, intensity: 3 }
+    ];
+  } else if (iceGiants.includes(id)) {
+    return [
+      { radius: size * 0.9, color: "#112233", emissive: "#000000", label: "H/He Atmosphere", pos: size * 0.9, intensity: 0 },
+      { radius: size * 0.6, color: "#2288cc", emissive: "#114488", label: "Icy Mantle (H2O, NH3)", pos: size * 0.6, intensity: 1 },
+      { radius: size * 0.3, color: "#ddbb99", emissive: "#aa8866", label: "Silicate/Iron Core", pos: size * 0.3, intensity: 2 }
+    ];
+  } else {
+    // Terrestrial planets (Earth, Mars, Venus, Mercury, Trappist)
+    return [
+      { radius: size * 0.99, color: "#333333", emissive: "#000000", label: "Crust", pos: size * 0.95, intensity: 0 },
+      { radius: size * 0.8, color: "#ff4400", emissive: "#ff2200", label: "Silicate Mantle", pos: size * 0.8, intensity: 2 },
+      { radius: size * 0.4, color: "#ffffff", emissive: "#ffeedd", label: "Iron Core", pos: size * 0.4, intensity: 5 }
+    ];
+  }
+};
+
 export function Planet({
   id,
   name,
@@ -188,41 +214,40 @@ export function Planet({
         </instancedMesh>
       )}
 
+      {/* Saturn's Rings */}
+      {id === "saturn" && (
+        <mesh rotation={[Math.PI / 2 - 0.2, 0, 0]} receiveShadow castShadow>
+          <ringGeometry args={[size * 1.4, size * 2.5, 64]} />
+          <meshStandardMaterial
+            color="#d3c0a5"
+            transparent
+            opacity={0.8}
+            side={THREE.DoubleSide}
+            clippingPlanes={isXRayMode && isActive ? clipPlanes : []}
+            clipIntersection={true}
+          />
+        </mesh>
+      )}
+
       {/* Internal Layers (Only visible in X-Ray mode) */}
       {isXRayMode && isActive && (
         <>
-          <mesh>
-            <sphereGeometry args={[size * 0.99, 64, 64]} />
-            <meshStandardMaterial color="#333" side={THREE.BackSide} />
-          </mesh>
-
-          <mesh>
-            <sphereGeometry args={[size * 0.8, 64, 64]} />
-            <meshStandardMaterial
-              color="#ff4400"
-              emissive="#ff2200"
-              emissiveIntensity={2}
-            />
-            <Html position={[size * 0.8, 0, 0]} center>
-              <div className="px-3 py-1 bg-black/80 text-orange-500 text-xs font-bold border border-orange-500/50 rounded pointer-events-none backdrop-blur-md">
-                Silicate Mantle
-              </div>
-            </Html>
-          </mesh>
-
-          <mesh>
-            <sphereGeometry args={[size * 0.4, 32, 32]} />
-            <meshStandardMaterial
-              color="#ffffff"
-              emissive="#ffeedd"
-              emissiveIntensity={5}
-            />
-            <Html position={[size * 0.4, size * 0.4, 0]} center>
-              <div className="px-3 py-1 bg-black/80 text-white text-xs font-bold border border-white/50 rounded pointer-events-none backdrop-blur-md whitespace-nowrap">
-                Iron Core
-              </div>
-            </Html>
-          </mesh>
+          {getXRayLayers(id, size).map((layer, index) => (
+            <mesh key={index}>
+              <sphereGeometry args={[layer.radius, 64, 64]} />
+              <meshStandardMaterial
+                color={layer.color}
+                emissive={layer.emissive}
+                emissiveIntensity={layer.intensity}
+                side={index === 0 ? THREE.BackSide : THREE.FrontSide}
+              />
+              <Html position={[layer.pos, layer.pos * (index === 1 ? 0.5 : 0), 0]} center zIndexRange={[100, 0]}>
+                <div className={`px-3 py-1 bg-black/80 text-xs font-bold border rounded pointer-events-none backdrop-blur-md whitespace-nowrap ${index === 0 ? 'text-gray-300 border-gray-500/50' : index === 1 ? 'text-orange-400 border-orange-500/50' : 'text-white border-white/50'}`}>
+                  {layer.label}
+                </div>
+              </Html>
+            </mesh>
+          ))}
         </>
       )}
     </group>

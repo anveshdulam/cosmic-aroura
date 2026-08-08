@@ -11,6 +11,8 @@ interface JourneyState {
   setDatabaseOpen: (active: boolean) => void;
   toggleDatabase: () => void;
   setSnapping: (active: boolean) => void;
+  scrollTo: ((offset: number) => void) | null;
+  setScrollTo: (fn: (offset: number) => void) => void;
 }
 
 export const useJourneyStore = create<JourneyState>((set) => ({
@@ -25,4 +27,6 @@ export const useJourneyStore = create<JourneyState>((set) => ({
   toggleDatabase: () =>
     set((state) => ({ isDatabaseOpen: !state.isDatabaseOpen })),
   setSnapping: (active) => set({ isSnapping: active }),
+  scrollTo: null,
+  setScrollTo: (fn) => set({ scrollTo: fn }),
 }));

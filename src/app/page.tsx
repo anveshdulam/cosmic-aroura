@@ -25,6 +25,7 @@ export default function Home() {
   const isDatabaseOpen = useJourneyStore((state) => state.isDatabaseOpen);
   const toggleDatabase = useJourneyStore((state) => state.toggleDatabase);
   const setSnapping = useJourneyStore((state) => state.setSnapping);
+  const scrollTo = useJourneyStore((state) => state.scrollTo);
 
   const handleCloseDatabase = () => {
     setSnapping(true);
@@ -167,11 +168,16 @@ export default function Home() {
 
         {/* Vertical Timeline Navigation */}
         <div className="hidden lg:flex flex-col gap-4 absolute left-8 top-1/2 -translate-y-1/2 z-50 pointer-events-auto">
-          {planetData.map((planet) => {
+          {planetData.map((planet, i) => {
             const isActive = activePlanetId === planet.id;
             return (
               <div
                 key={planet.id}
+                onClick={() => {
+                  if (scrollTo) {
+                    scrollTo(i / (planetData.length - 1));
+                  }
+                }}
                 className="flex items-center gap-4 justify-start group cursor-pointer"
               >
                 <div

@@ -94,11 +94,11 @@ export default function Scene() {
 
         {sunMesh && (
           <EffectComposer>
-            <GodRays sun={sunMesh} exposure={0.8} decay={0.92} blur />
+            <GodRays sun={sunMesh} exposure={0.4} decay={0.92} blur />
             <Bloom
               luminanceThreshold={0.9}
               luminanceSmoothing={0.1}
-              intensity={0.8}
+              intensity={0.4}
               mipmapBlur
             />
             <Noise opacity={0.05} />

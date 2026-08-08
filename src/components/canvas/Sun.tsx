@@ -34,14 +34,14 @@ export function Sun({ position, sunRef }: SunProps) {
         <meshBasicMaterial
           color="#ffaa00"
           transparent={true}
-          opacity={0.3}
+          opacity={0.15}
           blending={THREE.AdditiveBlending}
           side={THREE.BackSide}
         />
       </mesh>
 
-      <pointLight intensity={3} color="#ffaa33" distance={500} decay={1.5} />
-      <pointLight intensity={1.5} color="#ffffff" distance={4000} decay={0.5} />
+      <pointLight intensity={1.5} color="#ffaa33" distance={500} decay={1.5} />
+      <pointLight intensity={0.8} color="#ffffff" distance={4000} decay={0.5} />
     </group>
   );
 }
