@@ -65,14 +65,10 @@ export function Planet({
     cloudMap = useTexture("/textures/clouds.jpg");
   }
 
-  // Clipping planes for X-Ray (Fixed to World Coordinates of the planet)
-  const clipPlanes = useMemo(
-    () => [
-      new THREE.Plane(new THREE.Vector3(-1, 0, 0), position[0]),
-      new THREE.Plane(new THREE.Vector3(0, 0, -1), position[2]),
-    ],
-    [position],
-  );
+  // Clipping planes for X-Ray mode (Clip front half facing the camera)
+  const clipPlanes = useMemo(() => {
+    return [new THREE.Plane(new THREE.Vector3(0, 0, 1), 0)];
+  }, []);
 
   const moonCountSafe = moonCount || 0;
 
@@ -233,10 +229,23 @@ export function Planet({
       {isXRayMode && isActive && (
         <>
           {getXRayLayers(id, size).map((layer, index) => {
-            // Start at the cut face (X=0) at the top edge of the layer (Y=layer.radius)
-            const startPoint = new THREE.Vector3(0, layer.radius, 0);
-            // Extend horizontally to the right into the empty clipped space (positive X)
-            const endPoint = new THREE.Vector3(size * 0.3 + (index * size * 0.1), layer.radius, 0);
+            // Draw an elegant 3-point infographic line in the XY plane
+            const angle = Math.PI / 4; // 45 degrees top-right
+            
+            // Point A: On the edge of the layer
+            const startX = layer.radius * Math.cos(angle);
+            const startY = layer.radius * Math.sin(angle);
+            const startPoint = new THREE.Vector3(startX, startY, 0);
+            
+            // Point B: Diagonal bend slightly outside the layer
+            const bendRadius = layer.radius + size * 0.15;
+            const bendX = bendRadius * Math.cos(angle);
+            const bendY = bendRadius * Math.sin(angle);
+            const bendPoint = new THREE.Vector3(bendX, bendY, 0);
+            
+            // Point C: Horizontal extension to the right
+            const endX = size * 1.5;
+            const endPoint = new THREE.Vector3(endX, bendY, 0);
             
             return (
               <mesh key={index}>
@@ -248,9 +257,9 @@ export function Planet({
                   side={index === 0 ? THREE.BackSide : THREE.FrontSide}
                 />
                 
-                {/* Connecting Line */}
+                {/* Infographic Line */}
                 <Line
-                  points={[startPoint, endPoint]}
+                  points={[startPoint, bendPoint, endPoint]}
                   color={index === 0 ? "#888888" : index === 1 ? "#ffaa00" : "#ffffff"}
                   lineWidth={2}
                   transparent
