@@ -100,6 +100,17 @@ export function Planet({
     if (groupRef.current) {
       if (!isXRayMode || !isActive) {
         groupRef.current.rotation.y += delta * 0.05;
+      } else {
+        // Smoothly rotate the planet to face the camera so the X-Ray cut is perfectly visible
+        // Modulo the rotation to prevent wild spinning if it's been rotating for a while
+        let currentY = groupRef.current.rotation.y % (Math.PI * 2);
+        // Ensure we take the shortest path to 0
+        if (currentY > Math.PI) currentY -= Math.PI * 2;
+        if (currentY < -Math.PI) currentY += Math.PI * 2;
+        
+        groupRef.current.rotation.y = THREE.MathUtils.lerp(currentY, 0, 0.05);
+        groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, 0, 0.05);
+        groupRef.current.rotation.z = THREE.MathUtils.lerp(groupRef.current.rotation.z, 0, 0.05);
       }
     }
     if (cloudsRef.current) {
