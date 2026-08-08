@@ -2,7 +2,7 @@ import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { useJourneyStore } from "@/store/journeyStore";
-import { Html, useTexture } from "@react-three/drei";
+import { Html, Line, useTexture } from "@react-three/drei";
 
 interface PlanetProps {
   id: string;
@@ -232,22 +232,40 @@ export function Planet({
       {/* Internal Layers (Only visible in X-Ray mode) */}
       {isXRayMode && isActive && (
         <>
-          {getXRayLayers(id, size).map((layer, index) => (
-            <mesh key={index}>
-              <sphereGeometry args={[layer.radius, 64, 64]} />
-              <meshStandardMaterial
-                color={layer.color}
-                emissive={layer.emissive}
-                emissiveIntensity={layer.intensity}
-                side={index === 0 ? THREE.BackSide : THREE.FrontSide}
-              />
-              <Html position={[layer.pos, layer.pos * (index === 1 ? 0.5 : 0), 0]} center zIndexRange={[100, 0]}>
-                <div className={`px-3 py-1 bg-black/80 text-xs font-bold border rounded pointer-events-none backdrop-blur-md whitespace-nowrap ${index === 0 ? 'text-gray-300 border-gray-500/50' : index === 1 ? 'text-orange-400 border-orange-500/50' : 'text-white border-white/50'}`}>
-                  {layer.label}
-                </div>
-              </Html>
-            </mesh>
-          ))}
+          {getXRayLayers(id, size).map((layer, index) => {
+            const startPoint = new THREE.Vector3(layer.radius, 0, 0);
+            const lineX = size * 1.5 + (index * size * 0.4);
+            const lineY = layer.radius * 0.8;
+            const endPoint = new THREE.Vector3(lineX, lineY, 0);
+            
+            return (
+              <mesh key={index}>
+                <sphereGeometry args={[layer.radius, 64, 64]} />
+                <meshStandardMaterial
+                  color={layer.color}
+                  emissive={layer.emissive}
+                  emissiveIntensity={layer.intensity}
+                  side={index === 0 ? THREE.BackSide : THREE.FrontSide}
+                />
+                
+                {/* Connecting Line */}
+                <Line
+                  points={[startPoint, endPoint]}
+                  color={index === 0 ? "#888888" : index === 1 ? "#ffaa00" : "#ffffff"}
+                  lineWidth={1.5}
+                  transparent
+                  opacity={0.6}
+                />
+
+                {/* External Label */}
+                <Html position={[endPoint.x, endPoint.y, endPoint.z]} center zIndexRange={[100, 0]}>
+                  <div className={`px-3 py-1 bg-black/80 text-xs font-bold border rounded pointer-events-none backdrop-blur-md whitespace-nowrap shadow-lg ${index === 0 ? 'text-gray-300 border-gray-500/50' : index === 1 ? 'text-orange-400 border-orange-500/50' : 'text-white border-white/50'}`}>
+                    {layer.label}
+                  </div>
+                </Html>
+              </mesh>
+            );
+          })}
         </>
       )}
     </group>
