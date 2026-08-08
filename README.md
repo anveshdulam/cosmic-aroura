@@ -7,6 +7,8 @@
 
 **Aurora Atlas** is an immersive, high-performance 3D interactive journey from the center of our solar system to the edge of the observable universe. Built as a submission for a 3D Interactive Website Hackathon, it combines procedural astrophysics, volumetric WebGL shaders, and cinematic user experiences.
 
+### 🌐 [**Live Demo: cosmic-atlas-kappa.vercel.app**](https://cosmic-atlas-kappa.vercel.app)
+
 ---
 
 ## ✨ Features
