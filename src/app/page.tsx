@@ -80,7 +80,7 @@ export default function Home() {
               </p>
 
               {/* Action Buttons */}
-              <div className="mt-6 flex flex-col gap-3">
+              <div className="mt-8 flex flex-wrap gap-4">
                 {activePlanetId !== "sun" &&
                   activePlanetId !== "milkyway" &&
                   activePlanetId && (
