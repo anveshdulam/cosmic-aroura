@@ -192,14 +192,14 @@ export default function Home() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              exit={{ opacity: 0, transition: { duration: 0.15 } }}
+              exit={{ opacity: 0, transition: { duration: 1.2 } }}
               transition={{ duration: 0.3 }}
               className="absolute inset-0 z-[100] flex items-center justify-center p-4 md:p-12 bg-black/60 backdrop-blur-xl pointer-events-auto"
             >
               <motion.div
                 initial={{ opacity: 0, scale: 1.5, filter: "blur(20px)", rotate: 5, boxShadow: "0px 0px 100px 20px rgba(16, 185, 129, 0.8)" }}
                 animate={{ opacity: 1, scale: 1, filter: "blur(0px)", rotate: 0, boxShadow: "0px 0px 0px 0px rgba(16, 185, 129, 0)" }}
-                exit={{ opacity: 0, scale: 0, filter: "blur(10px)", rotate: -10, transition: { duration: 0.2, ease: "anticipate" } }}
+                exit={{ opacity: 0, scale: 1.1, y: -100, x: 50, filter: "blur(25px)", rotate: 5, transition: { duration: 1.2, ease: "easeOut" } }}
                 transition={{ type: "spring", damping: 20, stiffness: 100, mass: 1 }}
                 className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-black/40 border border-white/20 shadow-2xl rounded-3xl p-8 md:p-12 custom-scrollbar"
               >
