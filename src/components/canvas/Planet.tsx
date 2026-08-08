@@ -277,9 +277,9 @@ export function Planet({
                   opacity={0.8}
                 />
 
-                {/* External Label */}
-                <Html position={[endPoint.x, endPoint.y, endPoint.z]} center zIndexRange={[100, 0]}>
-                  <div className={`px-3 py-1 bg-black/80 text-xs font-bold border rounded pointer-events-none backdrop-blur-md whitespace-nowrap shadow-lg ${index === 0 ? 'text-gray-300 border-gray-500/50' : index === 1 ? 'text-orange-400 border-orange-500/50' : 'text-white border-white/50'}`}>
+                {/* External Label (CSS3D for perfect alignment) */}
+                <Html position={[endPoint.x, endPoint.y, endPoint.z]} center transform sprite distanceFactor={50}>
+                  <div className={`px-4 py-1.5 bg-black/80 text-sm font-bold border rounded-lg pointer-events-none whitespace-nowrap shadow-[0_0_15px_rgba(0,0,0,0.8)] ${index === 0 ? 'text-gray-300 border-gray-500/50' : index === 1 ? 'text-orange-400 border-orange-500/50' : 'text-white border-white/50'}`}>
                     {layer.label}
                   </div>
                 </Html>
