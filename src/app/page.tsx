@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { useJourneyStore } from "@/store/journeyStore";
 import { planetData } from "@/components/canvas/JourneyController";
-import { Telescope, Layers, Compass, ExternalLink } from "lucide-react";
+import { Telescope, Layers, Compass, ExternalLink, X } from "lucide-react";
 
 const Scene = dynamic(() => import("@/components/canvas/Scene"), {
   ssr: false,
@@ -20,6 +20,8 @@ export default function Home() {
   const activePlanetId = useJourneyStore((state) => state.activePlanetId);
   const isXRayMode = useJourneyStore((state) => state.isXRayMode);
   const toggleXRayMode = useJourneyStore((state) => state.toggleXRayMode);
+  const isDatabaseOpen = useJourneyStore((state) => state.isDatabaseOpen);
+  const toggleDatabase = useJourneyStore((state) => state.toggleDatabase);
 
   // Default to Sun if none is active (e.g. at the very start)
   const activePlanet =
@@ -84,15 +86,13 @@ export default function Home() {
                   )}
 
                 {activePlanetId && (
-                  <a
-                    href={`https://en.wikipedia.org/wiki/${activePlanet?.title.replace(/ /g, "_")}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    onClick={toggleDatabase}
                     className="flex items-center gap-2 px-6 py-3 rounded-full font-inter text-sm font-bold tracking-wide transition-all bg-indigo-600/80 hover:bg-indigo-500 text-white backdrop-blur-md border border-indigo-400/50 shadow-[0_0_15px_rgba(79,70,229,0.3)] hover:shadow-[0_0_25px_rgba(79,70,229,0.6)] w-fit"
                   >
                     <ExternalLink className="w-4 h-4" />
                     Access Database
-                  </a>
+                  </button>
                 )}
               </div>
             </div>
@@ -181,6 +181,51 @@ export default function Home() {
           <div className="absolute top-8 left-1/2 -translate-x-1/2 pointer-events-none animate-pulse">
             <div className="px-4 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-500/50 text-indigo-300 text-xs font-bold tracking-widest uppercase backdrop-blur-md">
               Focus Mode Engaged — Drag to Orbit
+            </div>
+          </div>
+        )}
+
+        {/* Database Modal Overlay */}
+        {isDatabaseOpen && (
+          <div className="absolute inset-0 z-[100] flex items-center justify-center p-4 md:p-12 bg-black/60 backdrop-blur-xl transition-all pointer-events-auto">
+            <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-black/40 border border-white/20 shadow-2xl rounded-3xl p-8 md:p-12 custom-scrollbar">
+              <button
+                onClick={toggleDatabase}
+                className="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-all text-white border border-white/10"
+              >
+                <X className="w-6 h-6" />
+              </button>
+
+              <div className="mb-6 inline-block px-3 py-1 rounded-full border border-indigo-500/50 bg-indigo-500/20 text-indigo-300 text-xs font-bold tracking-widest uppercase shadow-lg">
+                Database Entry // {activePlanet?.id.toUpperCase()}
+              </div>
+              
+              <h2 className="text-5xl md:text-7xl font-black font-outfit mb-8 drop-shadow-xl text-white">
+                {activePlanet?.title}
+              </h2>
+
+              <p className="text-xl md:text-2xl font-inter text-white/90 leading-relaxed mb-12 drop-shadow-md">
+                {(activePlanet as any)?.description || "Data corrupted. Lore not found."}
+              </p>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 border-t border-white/20 pt-8">
+                <div>
+                  <h4 className="text-xs uppercase font-inter text-white/50 font-bold tracking-wider mb-1">Mass</h4>
+                  <p className="text-lg font-bold font-outfit text-indigo-300">{activePlanet?.mass}</p>
+                </div>
+                <div>
+                  <h4 className="text-xs uppercase font-inter text-white/50 font-bold tracking-wider mb-1">Gravity</h4>
+                  <p className="text-lg font-bold font-outfit text-white/90">{activePlanet?.gravity}</p>
+                </div>
+                <div>
+                  <h4 className="text-xs uppercase font-inter text-white/50 font-bold tracking-wider mb-1">Temperature</h4>
+                  <p className="text-lg font-bold font-outfit text-white/90">{activePlanet?.temp}</p>
+                </div>
+                <div>
+                  <h4 className="text-xs uppercase font-inter text-white/50 font-bold tracking-wider mb-1">Atmosphere</h4>
+                  <p className="text-lg font-bold font-outfit text-indigo-200 leading-tight">{activePlanet?.atm}</p>
+                </div>
+              </div>
             </div>
           </div>
         )}

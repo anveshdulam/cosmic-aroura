@@ -18,6 +18,8 @@ export const planetData = [
     temp: "5,500 °C",
     atm: "Hydrogen, Helium",
     moonCount: 0,
+    description:
+      "The Sun is a G-type main-sequence star (G2V) that accounts for 99.86% of the mass in the Solar System. Deep in its core, hydrogen undergoes nuclear fusion, releasing immense amounts of energy that travels outward as light and heat. Its dynamic magnetic field drives solar flares and coronal mass ejections that shape the entire heliosphere.",
   },
   {
     id: "mercury",
@@ -32,6 +34,8 @@ export const planetData = [
     temp: "167 °C",
     atm: "Trace",
     moonCount: 0,
+    description:
+      "Mercury is the smallest and innermost planet in the Solar System. Without a substantial atmosphere to retain heat, it experiences the greatest temperature variations of all the planets, ranging from -173 °C at night to 427 °C during the day. Its heavily cratered surface resembles Earth's Moon, indicating a long history of dormancy.",
   },
   {
     id: "venus",
@@ -46,6 +50,8 @@ export const planetData = [
     temp: "464 °C",
     atm: "Carbon Dioxide",
     moonCount: 0,
+    description:
+      "Often called Earth's twin due to its similar size, Venus is a hellish world choked by a thick, toxic atmosphere of carbon dioxide and sulfuric acid clouds. This immense greenhouse effect makes it the hottest planet in the Solar System. It spins slowly in retrograde, meaning the Sun rises in the west and sets in the east.",
   },
   {
     id: "earth",
@@ -60,6 +66,8 @@ export const planetData = [
     temp: "15 °C",
     atm: "Nitrogen, Oxygen",
     moonCount: 1,
+    description:
+      "Our home world is the only known planet to harbor life. It sits safely in the Goldilocks zone, where liquid water flows freely on the surface. Protected by a strong magnetic field and a nitrogen-oxygen atmosphere, Earth's dynamic tectonic plates and active biosphere continually reshape its vibrant surface.",
   },
   {
     id: "mars",
@@ -74,6 +82,8 @@ export const planetData = [
     temp: "-65 °C",
     atm: "Carbon Dioxide",
     moonCount: 2,
+    description:
+      "The Red Planet is a cold, desert world covered in iron oxide dust. It features the tallest volcano in the Solar System, Olympus Mons, and a canyon system, Valles Marineris, that dwarfs the Grand Canyon. Ancient river valleys suggest that billions of years ago, Mars was a wet and potentially habitable world.",
   },
   {
     id: "jupiter",
@@ -88,6 +98,8 @@ export const planetData = [
     temp: "-110 °C",
     atm: "Hydrogen, Helium",
     moonCount: 95,
+    description:
+      "Jupiter is a gas giant with a mass more than two and a half times that of all the other planets combined. Its iconic swirling cloud bands are driven by fierce winds and massive storms, the most famous being the Great Red Spot. Deep within its core, immense pressure creates a bizarre ocean of liquid metallic hydrogen.",
   },
   {
     id: "saturn",
@@ -102,6 +114,8 @@ export const planetData = [
     temp: "-140 °C",
     atm: "Hydrogen, Helium",
     moonCount: 146,
+    description:
+      "Known as the Jewel of the Solar System, Saturn is famous for its stunning, complex ring system made primarily of ice particles and rocky debris. Like Jupiter, it is a massive gas giant without a solid surface. Its moon Titan is the only moon in the Solar System with a thick atmosphere and liquid methane lakes.",
   },
   {
     id: "uranus",
@@ -116,6 +130,8 @@ export const planetData = [
     temp: "-195 °C",
     atm: "Hydrogen, Helium, Methane",
     moonCount: 27,
+    description:
+      "Uranus is an ice giant that orbits the Sun completely on its side, a strange tilt likely caused by a colossal collision in the ancient past. The methane in its upper atmosphere absorbs red light, giving the planet its serene, pale blue color. It experiences extreme seasons, with its poles plunged into darkness for 42 years at a time.",
   },
   {
     id: "neptune",
@@ -130,6 +146,8 @@ export const planetData = [
     temp: "-200 °C",
     atm: "Hydrogen, Methane",
     moonCount: 14,
+    description:
+      "The farthest known planet from the Sun, Neptune is a dark, cold, and incredibly windy ice giant. Supersonic winds whip through its atmosphere, pushing giant dark storms across its deep blue visage. Its largest moon, Triton, orbits backward and is geologically active, spewing geysers of nitrogen ice.",
   },
   {
     id: "kuiperbelt",
@@ -144,6 +162,8 @@ export const planetData = [
     temp: "-220 °C",
     atm: "Vacuum",
     moonCount: 0,
+    description:
+      "The Kuiper Belt is a vast, icy ring of remnants from the formation of the Solar System. It stretches beyond the orbit of Neptune and is home to thousands of dwarf planets, including Pluto, Haumea, and Makemake. These ancient, frozen relics hold key secrets to the primordial origins of our planetary neighborhood.",
   },
   {
     id: "trappist",
@@ -158,6 +178,8 @@ export const planetData = [
     temp: "-20 °C",
     atm: "Unknown",
     moonCount: 0,
+    description:
+      "Located nearly 40 light-years away, TRAPPIST-1 is an ultra-cool red dwarf star surrounded by seven Earth-sized rocky planets. Three of these planets orbit firmly within the habitable zone, making it one of the most promising and heavily studied extrasolar systems in the search for liquid water and alien life.",
   },
   {
     id: "milkyway",
@@ -172,6 +194,8 @@ export const planetData = [
     temp: "2.7 K",
     atm: "Interstellar Gas",
     moonCount: 0,
+    description:
+      "Our cosmic home is a vast, barred spiral galaxy stretching over 100,000 light-years across. It contains anywhere from 100 to 400 billion stars, spiraling intricately around a supermassive black hole known as Sagittarius A*. From the inside, it appears as a glowing band of ancient starlight arching across the night sky.",
   },
   {
     id: "nebula",
@@ -186,6 +210,8 @@ export const planetData = [
     temp: "10,000 K",
     atm: "Ionized Gas",
     moonCount: 0,
+    description:
+      "The Crab Nebula is the sprawling, glowing wreckage of a massive star that exploded in a brilliant supernova witnessed by Earth astronomers in the year 1054. At its very center lies a rapidly spinning neutron star—a pulsar—that violently emits beams of radiation 30 times a second as it whips up the surrounding gas clouds.",
   },
   {
     id: "andromeda",
@@ -200,6 +226,8 @@ export const planetData = [
     temp: "2.7 K",
     atm: "Interstellar Gas",
     moonCount: 0,
+    description:
+      "Andromeda is a spectacular spiral galaxy and the nearest major galactic neighbor to the Milky Way. Containing approximately one trillion stars, it is on a slow, multi-billion-year collision course with our galaxy. Over immense cosmic timescales, the two will eventually merge to form an enormous, elliptical super-galaxy.",
   },
   {
     id: "localgroup",
@@ -214,6 +242,8 @@ export const planetData = [
     temp: "2.7 K",
     atm: "Intergalactic Medium",
     moonCount: 0,
+    description:
+      "The Local Group is the galactic neighborhood that contains the Milky Way, Andromeda, the Triangulum Galaxy, and over 50 smaller dwarf galaxies. Bound together by immense gravitational forces, this localized cluster stretches over 10 million light-years in diameter, acting as a small node in the vast cosmic web.",
   },
   {
     id: "cosmicweb",
@@ -228,6 +258,8 @@ export const planetData = [
     temp: "2.7 K",
     atm: "Dark Matter Filaments",
     moonCount: 0,
+    description:
+      "Laniakea (Hawaiian for 'immense heaven') is the gargantuan galaxy supercluster that is home to our Milky Way. It spans an incomprehensible 500 million light-years and contains over 100,000 galaxies. Here, matter is drawn along glowing filaments of dark matter toward a mysterious gravitational anomaly known as the Great Attractor.",
   },
 ];
 
