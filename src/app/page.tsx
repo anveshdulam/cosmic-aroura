@@ -86,7 +86,8 @@ export default function Home() {
                   activePlanetId && (
                     <button
                       onClick={toggleXRayMode}
-                      className={`flex items-center gap-2 px-6 py-3 rounded-full font-inter text-sm font-bold tracking-wide transition-all w-fit ${
+                      style={{ cursor: "pointer" }}
+                      className={`relative z-[100] flex items-center gap-2 px-6 py-3 rounded-full font-inter text-sm font-bold tracking-wide transition-all w-fit pointer-events-auto ${
                         isXRayMode
                           ? "bg-indigo-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.6)]"
                           : "bg-white/10 text-white hover:bg-white/20 backdrop-blur-md border border-white/20 shadow-lg hover:shadow-xl"
@@ -167,7 +168,7 @@ export default function Home() {
         </div>
 
         {/* Vertical Timeline Navigation */}
-        <div className="hidden lg:flex flex-col gap-4 absolute left-8 top-1/2 -translate-y-1/2 z-50 pointer-events-auto">
+        <div className="hidden lg:flex flex-col gap-4 absolute left-8 top-1/2 -translate-y-1/2 z-[60] pointer-events-none">
           {planetData.map((planet, i) => {
             const isActive = activePlanetId === planet.id;
             return (
@@ -178,7 +179,7 @@ export default function Home() {
                     scrollTo(i / (planetData.length - 1));
                   }
                 }}
-                className="flex items-center gap-4 justify-start group cursor-pointer"
+                className="flex items-center gap-4 justify-start group cursor-pointer pointer-events-auto"
               >
                 <div
                   className={`rounded-full transition-all duration-300 flex-shrink-0 ${isActive ? "w-3 h-3 bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]" : "w-2 h-2 bg-white/20 group-hover:bg-white/50 group-hover:scale-125"}`}
