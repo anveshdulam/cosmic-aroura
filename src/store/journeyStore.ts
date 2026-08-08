@@ -4,21 +4,25 @@ interface JourneyState {
   activePlanetId: string | null;
   isXRayMode: boolean;
   isDatabaseOpen: boolean;
+  isSnapping: boolean;
   setActivePlanet: (id: string | null) => void;
   setXRayMode: (active: boolean) => void;
   toggleXRayMode: () => void;
   setDatabaseOpen: (active: boolean) => void;
   toggleDatabase: () => void;
+  setSnapping: (active: boolean) => void;
 }
 
 export const useJourneyStore = create<JourneyState>((set) => ({
   activePlanetId: null,
   isXRayMode: false,
   isDatabaseOpen: false,
+  isSnapping: false,
   setActivePlanet: (id) => set({ activePlanetId: id }),
   setXRayMode: (active) => set({ isXRayMode: active }),
   toggleXRayMode: () => set((state) => ({ isXRayMode: !state.isXRayMode })),
   setDatabaseOpen: (active) => set({ isDatabaseOpen: active }),
   toggleDatabase: () =>
     set((state) => ({ isDatabaseOpen: !state.isDatabaseOpen })),
+  setSnapping: (active) => set({ isSnapping: active }),
 }));

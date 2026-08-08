@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useJourneyStore } from "@/store/journeyStore";
 import { planetData } from "@/components/canvas/JourneyController";
 import { Telescope, Layers, Compass, ExternalLink, X } from "lucide-react";
+import ThanosParticles from "@/components/ui/ThanosParticles";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Scene = dynamic(() => import("@/components/canvas/Scene"), {
@@ -23,6 +24,15 @@ export default function Home() {
   const toggleXRayMode = useJourneyStore((state) => state.toggleXRayMode);
   const isDatabaseOpen = useJourneyStore((state) => state.isDatabaseOpen);
   const toggleDatabase = useJourneyStore((state) => state.toggleDatabase);
+  const setSnapping = useJourneyStore((state) => state.setSnapping);
+
+  const handleCloseDatabase = () => {
+    setSnapping(true);
+    toggleDatabase();
+    setTimeout(() => {
+      setSnapping(false);
+    }, 2500);
+  };
 
   // Default to Sun if none is active (e.g. at the very start)
   const activePlanet =
@@ -204,7 +214,7 @@ export default function Home() {
                 className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-black/40 border border-white/20 shadow-2xl rounded-3xl p-8 md:p-12 custom-scrollbar"
               >
                 <button
-                  onClick={toggleDatabase}
+                  onClick={handleCloseDatabase}
                   className="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-all text-white border border-white/10"
                 >
                   <X className="w-6 h-6" />
@@ -244,6 +254,8 @@ export default function Home() {
             </motion.div>
           )}
         </AnimatePresence>
+
+        <ThanosParticles />
       </main>
     </>
   );
