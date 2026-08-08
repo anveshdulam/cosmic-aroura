@@ -16,7 +16,7 @@ export function Starfield({ count = 5000 }) {
       pos[i * 3] = (Math.random() - 0.5) * 2000;
       pos[i * 3 + 1] = (Math.random() - 0.5) * 2000;
       pos[i * 3 + 2] = (Math.random() - 0.5) * 5000; // Deep Z axis
-      scl[i] = Math.random();
+      scl[i] = Math.random() + 0.5; // Make them slightly larger baseline
     }
     return [pos, scl];
   }, [count]);
@@ -58,11 +58,11 @@ export function Starfield({ count = 5000 }) {
       </bufferGeometry>
       <pointsMaterial
         ref={materialRef}
-        size={2}
+        size={3.5}
         color="#ffffff"
         sizeAttenuation={true}
         transparent
-        opacity={0.8}
+        opacity={0.9}
         blending={THREE.AdditiveBlending}
       />
     </points>

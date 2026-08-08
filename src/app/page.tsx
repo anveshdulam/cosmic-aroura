@@ -3,13 +3,13 @@
 import dynamic from "next/dynamic";
 import { useJourneyStore } from "@/store/journeyStore";
 import { planetData } from "@/components/canvas/JourneyController";
-import { Telescope, Layers, Compass } from "lucide-react";
+import { Telescope, Layers, Compass, ExternalLink } from "lucide-react";
 
 const Scene = dynamic(() => import("@/components/canvas/Scene"), {
   ssr: false,
   loading: () => (
     <div className="fixed inset-0 w-full h-full -z-10 bg-[#020205] flex items-center justify-center">
-      <div className="text-white/50 font-inter tracking-widest text-sm animate-pulse">
+      <div className="text-white/80 font-inter font-bold tracking-widest text-sm animate-pulse">
         INITIATING LAUNCH SEQUENCE...
       </div>
     </div>
@@ -32,15 +32,15 @@ export default function Home() {
       <main className="fixed inset-0 w-full h-screen text-white pointer-events-none flex flex-col overflow-hidden z-10 select-none">
         {/* Minimalist Top Nav */}
         <header className="w-full p-8 md:px-12 md:py-8 flex justify-between items-center z-50 pointer-events-auto">
-          <div className="text-xl font-bold tracking-tighter font-outfit uppercase flex items-center gap-2">
+          <div className="text-xl font-bold tracking-tighter font-outfit uppercase flex items-center gap-2 drop-shadow-lg">
             <Compass className="w-5 h-5 text-indigo-400" />
             Cosmic Atlas
           </div>
-          <nav className="flex gap-6 font-inter text-sm tracking-widest uppercase text-white/50">
-            <button className="hover:text-white transition-colors">
+          <nav className="flex gap-6 font-inter text-sm font-bold tracking-widest uppercase text-white/80">
+            <button className="hover:text-white hover:drop-shadow-lg transition-all">
               Mission
             </button>
-            <button className="hover:text-white transition-colors">
+            <button className="hover:text-white hover:drop-shadow-lg transition-all">
               Database
             </button>
           </nav>
@@ -53,34 +53,48 @@ export default function Home() {
             <div
               className={`max-w-md pointer-events-auto transition-opacity duration-500 ${activePlanet ? "opacity-100" : "opacity-0"}`}
             >
-              <div className="inline-block px-3 py-1 mb-4 rounded-full border border-white/20 bg-white/5 text-white/70 text-xs font-medium tracking-widest uppercase backdrop-blur-md">
+              <div className="inline-block px-3 py-1 mb-4 rounded-full border border-white/30 bg-white/10 text-white/90 text-xs font-bold tracking-widest uppercase backdrop-blur-md shadow-lg">
                 Celestial Body
               </div>
-              <h1 className="text-6xl md:text-8xl font-bold font-outfit tracking-tighter mb-4 drop-shadow-2xl">
+              <h1 className="text-6xl md:text-8xl font-black font-outfit tracking-tighter mb-4 drop-shadow-2xl text-white">
                 {activePlanet?.title}
               </h1>
-              <p className="text-lg text-white/60 font-inter leading-relaxed drop-shadow-md">
+              <p className="text-xl text-white/90 font-inter font-medium leading-relaxed drop-shadow-lg">
                 {activePlanetId === "sun"
                   ? "Scroll to begin your journey to the edge of the observable universe."
                   : `Approaching ${activePlanet?.title}.`}
               </p>
 
-              {/* X-Ray Toggle Button */}
-              {activePlanetId !== "sun" &&
-                activePlanetId !== "milkyway" &&
-                activePlanetId && (
-                  <button
-                    onClick={toggleXRayMode}
-                    className={`mt-6 flex items-center gap-2 px-6 py-3 rounded-full font-inter text-sm font-semibold tracking-wide transition-all ${
-                      isXRayMode
-                        ? "bg-indigo-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.4)]"
-                        : "bg-white/10 text-white hover:bg-white/20 backdrop-blur-md border border-white/10"
-                    }`}
+              {/* Action Buttons */}
+              <div className="mt-6 flex flex-col gap-3">
+                {activePlanetId !== "sun" &&
+                  activePlanetId !== "milkyway" &&
+                  activePlanetId && (
+                    <button
+                      onClick={toggleXRayMode}
+                      className={`flex items-center gap-2 px-6 py-3 rounded-full font-inter text-sm font-bold tracking-wide transition-all w-fit ${
+                        isXRayMode
+                          ? "bg-indigo-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.6)]"
+                          : "bg-white/10 text-white hover:bg-white/20 backdrop-blur-md border border-white/20 shadow-lg hover:shadow-xl"
+                      }`}
+                    >
+                      <Layers className="w-4 h-4" />
+                      {isXRayMode ? "Disable X-Ray" : "Inspect Internal Layers"}
+                    </button>
+                  )}
+
+                {activePlanetId && (
+                  <a
+                    href={`https://en.wikipedia.org/wiki/${activePlanet?.title.replace(/ /g, "_")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-6 py-3 rounded-full font-inter text-sm font-bold tracking-wide transition-all bg-indigo-600/80 hover:bg-indigo-500 text-white backdrop-blur-md border border-indigo-400/50 shadow-[0_0_15px_rgba(79,70,229,0.3)] hover:shadow-[0_0_25px_rgba(79,70,229,0.6)] w-fit"
                   >
-                    <Layers className="w-4 h-4" />
-                    {isXRayMode ? "Disable X-Ray" : "Inspect Internal Layers"}
-                  </button>
+                    <ExternalLink className="w-4 h-4" />
+                    Access Database
+                  </a>
                 )}
+              </div>
             </div>
 
             {/* Right Data Panel (Glassmorphic) */}
@@ -88,50 +102,50 @@ export default function Home() {
               className={`hidden md:block w-72 bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6 pointer-events-auto transition-opacity duration-500 ${activePlanet ? "opacity-100" : "opacity-0"}`}
             >
               <div className="flex items-center gap-2 mb-6">
-                <Telescope className="w-4 h-4 text-white/50" />
-                <h3 className="text-sm uppercase tracking-widest text-white/50 font-inter font-medium">
+                <Telescope className="w-4 h-4 text-white/80" />
+                <h3 className="text-sm uppercase tracking-widest text-white/80 font-inter font-bold">
                   Telemetry
                 </h3>
               </div>
 
               <div className="space-y-4">
-                <div className="flex justify-between items-end border-b border-white/10 pb-2">
-                  <span className="text-xs text-white/40 uppercase font-inter tracking-wider">
+                <div className="flex justify-between items-end border-b border-white/20 pb-2">
+                  <span className="text-xs text-white/70 uppercase font-inter font-bold tracking-wider">
                     Distance from Sun
                   </span>
-                  <span className="font-outfit font-medium text-lg">
+                  <span className="font-outfit font-bold text-lg text-white">
                     {activePlanet?.distance}
                   </span>
                 </div>
-                <div className="flex justify-between items-end border-b border-white/10 pb-2">
-                  <span className="text-xs text-white/40 uppercase font-inter tracking-wider">
+                <div className="flex justify-between items-end border-b border-white/20 pb-2">
+                  <span className="text-xs text-white/70 uppercase font-inter font-bold tracking-wider">
                     Mass
                   </span>
-                  <span className="font-outfit font-medium text-lg text-indigo-300">
+                  <span className="font-outfit font-bold text-lg text-indigo-300">
                     {activePlanet?.mass}
                   </span>
                 </div>
-                <div className="flex justify-between items-end border-b border-white/10 pb-2">
-                  <span className="text-xs text-white/40 uppercase font-inter tracking-wider">
+                <div className="flex justify-between items-end border-b border-white/20 pb-2">
+                  <span className="text-xs text-white/70 uppercase font-inter font-bold tracking-wider">
                     Gravity
                   </span>
-                  <span className="font-outfit font-medium text-lg">
+                  <span className="font-outfit font-bold text-lg text-white">
                     {activePlanet?.gravity}
                   </span>
                 </div>
-                <div className="flex justify-between items-end border-b border-white/10 pb-2">
-                  <span className="text-xs text-white/40 uppercase font-inter tracking-wider">
+                <div className="flex justify-between items-end border-b border-white/20 pb-2">
+                  <span className="text-xs text-white/70 uppercase font-inter font-bold tracking-wider">
                     Mean Temp
                   </span>
-                  <span className="font-outfit font-medium text-lg">
+                  <span className="font-outfit font-bold text-lg text-white">
                     {activePlanet?.temp}
                   </span>
                 </div>
                 <div className="flex justify-between items-end pt-1">
-                  <span className="text-xs text-white/40 uppercase font-inter tracking-wider">
+                  <span className="text-xs text-white/70 uppercase font-inter font-bold tracking-wider">
                     Atmosphere
                   </span>
-                  <span className="font-outfit font-medium text-sm text-right max-w-[120px] leading-tight">
+                  <span className="font-outfit font-bold text-sm text-right max-w-[120px] leading-tight text-indigo-200">
                     {activePlanet?.atm}
                   </span>
                 </div>
