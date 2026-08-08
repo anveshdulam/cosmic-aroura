@@ -203,8 +203,8 @@ export function Sun({ position, sunRef }: SunProps) {
         />
       </mesh>
 
-      <pointLight intensity={0.8} color="#ffaa33" distance={500} decay={1.5} />
-      <pointLight intensity={0.4} color="#ffffff" distance={4000} decay={0.5} />
+      <pointLight intensity={0.5} color="#ffaa33" distance={500} decay={1.5} />
+      <pointLight intensity={0.2} color="#ffffff" distance={4000} decay={0.5} />
     </group>
   );
 }
