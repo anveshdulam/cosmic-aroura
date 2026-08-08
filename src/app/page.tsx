@@ -50,11 +50,24 @@ export default function Home() {
             <Compass className="w-5 h-5 text-indigo-400" />
             Cosmic Atlas
           </div>
-          <nav className="flex gap-6 font-inter text-sm font-bold tracking-widest uppercase text-white/80">
-            <button className="hover:text-white hover:drop-shadow-lg transition-all">
+          <nav className="flex items-center gap-6 font-inter text-sm font-bold tracking-widest uppercase text-white/80">
+            {activePlanetId && activePlanetId !== "sun" && activePlanetId !== "milkyway" && (
+              <button
+                onClick={toggleXRayMode}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
+                  isXRayMode
+                    ? "bg-indigo-500 text-white shadow-[0_0_15px_rgba(99,102,241,0.5)]"
+                    : "bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md"
+                }`}
+              >
+                <Layers className="w-4 h-4" />
+                <span className="hidden sm:inline">{isXRayMode ? "Disable X-Ray" : "X-Ray Mode"}</span>
+              </button>
+            )}
+            <button className="hover:text-white hover:drop-shadow-lg transition-all hidden sm:block">
               Mission
             </button>
-            <button className="hover:text-white hover:drop-shadow-lg transition-all">
+            <button className="hover:text-white hover:drop-shadow-lg transition-all hidden sm:block">
               Database
             </button>
           </nav>
@@ -81,22 +94,6 @@ export default function Home() {
 
               {/* Action Buttons */}
               <div className="mt-8 flex flex-wrap gap-4">
-                {activePlanetId !== "sun" &&
-                  activePlanetId !== "milkyway" &&
-                  activePlanetId && (
-                    <button
-                      onClick={toggleXRayMode}
-                      style={{ cursor: "pointer" }}
-                      className={`relative z-[100] flex items-center gap-2 px-6 py-3 rounded-full font-inter text-sm font-bold tracking-wide transition-all w-fit pointer-events-auto ${
-                        isXRayMode
-                          ? "bg-indigo-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.6)]"
-                          : "bg-white/10 text-white hover:bg-white/20 backdrop-blur-md border border-white/20 shadow-lg hover:shadow-xl"
-                      }`}
-                    >
-                      <Layers className="w-4 h-4" />
-                      {isXRayMode ? "Disable X-Ray" : "Inspect Internal Layers"}
-                    </button>
-                  )}
 
                 {activePlanetId && (
                   <button
