@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { useJourneyStore } from "@/store/journeyStore";
 import { planetData, planetScrollOffsets } from "@/components/canvas/JourneyController";
-import { Telescope, Layers, Compass, ExternalLink, X } from "lucide-react";
+import { Telescope, Layers, Compass, ExternalLink, X, Target } from "lucide-react";
 import ThanosParticles from "@/components/ui/ThanosParticles";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -20,8 +20,8 @@ const Scene = dynamic(() => import("@/components/canvas/Scene"), {
 
 export default function Home() {
   const activePlanetId = useJourneyStore((state) => state.activePlanetId);
-  const isXRayMode = useJourneyStore((state) => state.isXRayMode);
-  const toggleXRayMode = useJourneyStore((state) => state.toggleXRayMode);
+  const isFocusMode = useJourneyStore((state) => state.isFocusMode);
+  const toggleFocusMode = useJourneyStore((state) => state.toggleFocusMode);
   const isOrbitMode = useJourneyStore((state) => state.isOrbitMode);
   const toggleOrbitMode = useJourneyStore((state) => state.toggleOrbitMode);
   const isDatabaseOpen = useJourneyStore((state) => state.isDatabaseOpen);
@@ -53,20 +53,7 @@ export default function Home() {
             Cosmic Atlas
           </div>
           <nav className="flex items-center gap-6 font-inter text-sm font-bold tracking-widest uppercase text-white/80">
-            {activePlanetId && activePlanetId !== "sun" && activePlanetId !== "milkyway" && (
-              <button
-                onClick={toggleXRayMode}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
-                  isXRayMode
-                    ? "bg-indigo-500 text-white shadow-[0_0_15px_rgba(99,102,241,0.5)]"
-                    : "bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md"
-                }`}
-              >
-                <Layers className="w-4 h-4" />
-                <span className="hidden sm:inline">{isXRayMode ? "Disable X-Ray" : "X-Ray Mode"}</span>
-              </button>
-            )}
-            
+
             {activePlanetId && (
               <button
                 onClick={toggleOrbitMode}
@@ -78,6 +65,16 @@ export default function Home() {
               >
                 <Compass className="w-4 h-4" />
                 <span className="hidden sm:inline">{isOrbitMode ? "Hide Orbits" : "Show Orbits"}</span>
+              </button>
+            )}
+
+            {activePlanetId && (
+              <button
+                onClick={toggleFocusMode}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-300 ${isFocusMode ? "bg-white text-black border-white" : "bg-black/30 border-white/20 hover:bg-white/10"}`}
+              >
+                <Target size={18} className={isFocusMode ? "animate-pulse" : ""} />
+                <span className="text-xs tracking-wider uppercase font-bold">Focus Mode</span>
               </button>
             )}
 
@@ -121,11 +118,10 @@ export default function Home() {
             <div
               className={`hidden md:block w-72 bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6 pointer-events-auto transition-opacity duration-500 ${activePlanet ? "opacity-100" : "opacity-0"}`}
             >
+              <div className="text-xs text-white/50 mb-1">Status</div>
               <div className="flex items-center gap-2 mb-6">
-                <Telescope className="w-4 h-4 text-white/80" />
-                <h3 className="text-sm uppercase tracking-widest text-white/80 font-inter font-bold">
-                  Telemetry
-                </h3>
+                <div className={`w-2 h-2 rounded-full ${isFocusMode ? "bg-red-500 animate-pulse" : "bg-green-500"}`} />
+                <div className="text-sm font-bold tracking-widest">{isFocusMode ? "FOCUS ACTIVE" : "NOMINAL"}</div>
               </div>
 
               <div className="space-y-4">
@@ -201,8 +197,8 @@ export default function Home() {
           })}
         </div>
 
-        {/* X-Ray Mode Overlay Warning */}
-        {isXRayMode && (
+        {/* Focus Mode Overlay Warning */}
+        {isFocusMode && (
           <div className="absolute top-8 left-1/2 -translate-x-1/2 pointer-events-none animate-pulse">
             <div className="px-4 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-500/50 text-indigo-300 text-xs font-bold tracking-widest uppercase backdrop-blur-md">
               Focus Mode Engaged — Drag to Orbit

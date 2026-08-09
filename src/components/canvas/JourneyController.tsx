@@ -313,7 +313,7 @@ export function JourneyController() {
   const scroll = useScroll();
   const { camera } = useThree();
   const setActivePlanet = useJourneyStore((state) => state.setActivePlanet);
-  const isXRayMode = useJourneyStore((state) => state.isXRayMode);
+  const isFocusMode = useJourneyStore((state) => state.isFocusMode);
   const activePlanetId = useJourneyStore((state) => state.activePlanetId);
   const setScrollTo = useJourneyStore((state) => state.setScrollTo);
 
@@ -333,7 +333,7 @@ export function JourneyController() {
   const prevCamPos = useRef(new THREE.Vector3());
 
   useFrame((state, delta) => {
-    if (isXRayMode) {
+    if (isFocusMode) {
       return;
     }
 
@@ -411,6 +411,6 @@ export function JourneyController() {
     : new THREE.Vector3(0, 0, 0);
 
   return (
-    <>{isXRayMode && <OrbitControls enableDamping target={orbitTarget} />}</>
+    <>{isFocusMode && <OrbitControls enableDamping target={orbitTarget} />}</>
   );
 }
