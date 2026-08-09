@@ -440,7 +440,12 @@ export function JourneyController() {
     // For smaller planets, we get closer. For galaxies, we stay far away.
     const getCamOffset = (planet: any) => {
       if (planet.id === "sun") return new THREE.Vector3(12, 5, 10);
-      if (planet.size === 0) return new THREE.Vector3(0, 50, 100); // Deep space
+      if (["milkyway", "andromeda", "localgroup", "cosmicweb"].includes(planet.id)) {
+        return new THREE.Vector3(0, 1000, 3000); // Pull way back for galaxies
+      }
+      if (planet.id === "nebula") return new THREE.Vector3(0, 200, 500);
+      if (planet.id === "trappist") return new THREE.Vector3(0, 50, 150);
+      if (planet.id === "kuiperbelt") return new THREE.Vector3(0, 200, 400);
       return new THREE.Vector3(planet.size * 3 + 5, planet.size + 2, planet.size * 5 + 10);
     };
     
