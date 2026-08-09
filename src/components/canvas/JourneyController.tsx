@@ -439,7 +439,7 @@ export function JourneyController() {
     // Calculate dynamic camera waypoints (offset from planet)
     // For smaller planets, we get closer. For galaxies, we stay far away.
     const getCamOffset = (planet: any) => {
-      if (planet.id === "sun") return new THREE.Vector3(12, 5, 10);
+      if (planet.id === "sun") return new THREE.Vector3(0, 15, 35); // Pull back to see the whole Sun
       if (["milkyway", "andromeda", "localgroup", "cosmicweb"].includes(planet.id)) {
         return new THREE.Vector3(0, 1000, 3000); // Pull way back for galaxies
       }
