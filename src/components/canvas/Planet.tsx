@@ -305,20 +305,20 @@ export function Planet({
                 />
 
                 {/* Internal Label ON the crust (Zoomed In) */}
-                <Html position={[layer.pos * Math.cos(angle), layer.pos * Math.sin(angle), size * 0.05]} center transform sprite distanceFactor={50}>
+                <Html position={[layer.pos * Math.cos(angle), layer.pos * Math.sin(angle), size * 0.05]} center transform sprite scale={0.05}>
                   <div 
                     ref={el => { internalLabelRefs.current[index] = el; }} 
-                    className="text-sm md:text-base font-black tracking-wider uppercase text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] pointer-events-none whitespace-nowrap"
+                    className="font-inter text-sm md:text-base font-black tracking-wider uppercase text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] pointer-events-none whitespace-nowrap"
                   >
                     {layer.label}
                   </div>
                 </Html>
 
                 {/* External Label (Zoomed Out) */}
-                <Html position={[endPoint.x, endPoint.y, endPoint.z]} center transform sprite distanceFactor={50}>
+                <Html position={[endPoint.x, endPoint.y, endPoint.z]} center transform sprite scale={0.07}>
                   <div 
                     ref={el => { externalLabelRefs.current[index] = el; }} 
-                    className={`px-4 py-1.5 bg-black/80 text-sm font-bold border rounded-lg pointer-events-none whitespace-nowrap shadow-[0_0_15px_rgba(0,0,0,0.8)] ${index === 0 ? 'text-gray-300 border-gray-500/50' : index === 1 ? 'text-orange-400 border-orange-500/50' : 'text-white border-white/50'}`}
+                    className={`font-inter px-3 py-1 bg-black/80 text-xs font-bold border rounded-lg pointer-events-none whitespace-nowrap shadow-[0_0_15px_rgba(0,0,0,0.8)] ${index === 0 ? 'text-gray-300 border-gray-500/50' : index === 1 ? 'text-orange-400 border-orange-500/50' : 'text-white border-white/50'}`}
                   >
                     {layer.label}
                   </div>
