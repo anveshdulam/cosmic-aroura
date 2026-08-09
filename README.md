@@ -1,71 +1,53 @@
-# 🌌 Aurora Atlas
+# 🌌 Cosmic Atlas
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![React](https://img.shields.io/badge/React-19.0-blue)
-![Next.js](https://img.shields.io/badge/Next.js-15.0-black)
-![Three.js](https://img.shields.io/badge/Three.js-WebGL-white)
-
-**Aurora Atlas** is an immersive, high-performance 3D interactive journey from the center of our solar system to the edge of the observable universe. Built as a submission for a 3D Interactive Website Hackathon, it combines procedural astrophysics, volumetric WebGL shaders, and cinematic user experiences.
-
-### 🌐 [**Live Demo: cosmic-atlas-kappa.vercel.app**](https://cosmic-atlas-kappa.vercel.app)
-
----
+An immersive, interactive 3D web experience mapping our Solar System and beyond. Built with cutting-edge web technologies, Cosmic Atlas allows users to seamlessly scroll from the burning surface of the Sun to the cosmic web of the Laniakea Supercluster, all directly within the browser.
 
 ## ✨ Features
 
-- 🔭 **Cinematic Scroll-Driven Journey:** Travel seamlessly from the Sun to the Laniakea Supercluster via a smooth Catmull-Rom spline camera path, driven entirely by user scrolling.
-- 🪐 **Procedural Astrophysics:**
-  - **Milky Way Galaxy:** Rendered using realistic Sérsic profiles and 4-arm logarithmic spiral equations.
-  - **Sagittarius A*:** Features a dynamic Accretion Disk, Event Horizon, and gravitational lensing effects.
-  - **Instanced Moons:** Rendering 285 dynamic moons (e.g., Saturn's 146 moons) in a single draw call via `InstancedMesh` with Kepler-like orbital physics.
-- 🎇 **Volumetric Custom Shaders:** Raw GLSL and HTML5 Canvas shaders generate accurate atmospheric Fresnel glows, stellar coronas, and the cosmic web's dark matter filaments.
-- 🔬 **Educational X-Ray Mode:** Interactively slice planets with clipping planes to reveal their Silicate Mantles and Iron Cores.
-- ⚡ **High Performance:** Heavily optimized React Three Fiber engine designed to maintain 60+ FPS even when rendering thousands of instanced celestial bodies.
+- **Seamless Universal Scroll:** A cinematic, rollercoaster-like camera curve that journeys from the Sun, past the planets, out into interstellar space, and towards the edge of the observable universe.
+- **Photorealistic PBR Rendering:** Planets feature high-fidelity physically based rendering (PBR), atmospheric scattering, and procedural bump mapping.
+- **Dynamic X-Ray Mode:** Select any terrestrial planet and enter X-Ray mode to dynamically slice the planet open and reveal its internal crust, mantle, and core layers with perfectly scaled 3D infographic labels.
+- **Orbit Paths:** Visualize the orbital paths of every planet around the sun, and every moon around its respective planet.
+- **Procedural Shaders:** The Sun utilizes a custom GLSL shader simulating turbulent plasma, sunspots, and dynamic coronal flares.
+- **Glassmorphic HUD:** A dynamic, beautiful user interface displaying real telemetry data, mass, gravity, and atmospheric composition for celestial bodies.
 
-## 🛠️ Technology Stack
+## 🛠️ Tech Stack
 
-- **Framework:** Next.js (App Router)
-- **3D Engine:** Three.js, React Three Fiber, React Three Drei
-- **Post-Processing:** React Three Postprocessing (Bloom, GodRays, Vignette)
-- **Styling:** Tailwind CSS & Framer Motion
-- **State Management:** Zustand
-- **UI Components:** shadcn/ui
+- **Framework:** [Next.js](https://nextjs.org/) (App Router, React 18)
+- **3D Engine:** [Three.js](https://threejs.org/)
+- **React Wrapper:** [@react-three/fiber](https://docs.pmnd.rs/react-three-fiber/getting-started/introduction) & [@react-three/drei](https://github.com/pmndrs/drei)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+- **Animations:** [Framer Motion](https://www.framer.com/motion/)
+- **Post-Processing:** God rays, bloom, vignette, and cinematic noise.
 
-## 🚀 Getting Started
+## 🚀 Running Locally
 
-### Prerequisites
-
-Ensure you have [Node.js](https://nodejs.org/) installed on your machine.
-
-### Installation
-
-1. Clone the repository:
+1. **Clone the repository:**
    ```bash
-   git clone https://github.com/anveshdulam/cosmic-aroura.git
+   git clone https://github.com/your-username/cosmic-atlas.git
+   cd cosmic-atlas
    ```
-2. Navigate into the project directory:
-   ```bash
-   cd cosmic-aroura
-   ```
-3. Install dependencies:
+
+2. **Install dependencies:**
    ```bash
    npm install
    ```
 
-### Running the Development Server
+3. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
 
-Start the local development server:
+4. **Explore the Universe:**
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-```bash
-npm run dev
-```
+## 🎮 Controls
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to explore the cosmos.
+- **Scroll:** Journey through the cosmos.
+- **Click Planet List:** Instantly warp to a specific planet.
+- **Drag:** Orbit around the actively selected planet.
+- **X-Ray Mode:** (Top navigation) Engage to view the internal geology of terrestrial planets.
+- **Orbit Mode:** Toggle to view the physical orbital paths of the solar system.
 
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/anveshdulam/cosmic-aroura/issues).
-
-## 📄 License
-
-This project is [MIT](https://choosealicense.com/licenses/mit/) licensed.
+## 📜 License
+MIT License. Created for the 3D Web Hackathon.

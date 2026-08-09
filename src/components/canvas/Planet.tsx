@@ -48,6 +48,7 @@ export function Planet({
   moonCount,
 }: PlanetProps) {
   const isXRayMode = useJourneyStore((state) => state.isXRayMode);
+  const isOrbitMode = useJourneyStore((state) => state.isOrbitMode);
   const activePlanetId = useJourneyStore((state) => state.activePlanetId);
   const isActive = activePlanetId === id;
 
@@ -185,8 +186,11 @@ export function Planet({
       {/* Outer Crust (Photorealistic) */}
       <mesh ref={crustRef} castShadow receiveShadow>
         <sphereGeometry args={[size, 64, 64]} />
-        <meshStandardMaterial
-          map={colorMap}
+        <meshPhysicalMaterial
+          map={colorMap || undefined}
+          color={colorMap ? undefined : color}
+          bumpMap={colorMap || undefined}
+          bumpScale={0.02}
           roughness={id === "earth" ? 0.4 : 0.8}
           metalness={id === "earth" ? 0.1 : 0.0}
           clippingPlanes={isXRayMode && isActive ? clipPlanes : []}
@@ -334,7 +338,13 @@ export function Planet({
             {name}
           </div>
         </Html>
-      )}
+      {/* Moon Orbits */}
+      {isOrbitMode && moonsData.map((moon, index) => (
+        <mesh key={`moon-orbit-${index}`} rotation-x={Math.PI / 2 + moon.inclination}>
+          <ringGeometry args={[moon.distance - 0.05, moon.distance + 0.05, 64]} />
+          <meshBasicMaterial color="#ffffff" transparent opacity={0.1} side={THREE.DoubleSide} depthWrite={false} />
+        </mesh>
+      ))}
     </group>
   );
 }

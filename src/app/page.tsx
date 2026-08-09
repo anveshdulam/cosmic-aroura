@@ -22,6 +22,8 @@ export default function Home() {
   const activePlanetId = useJourneyStore((state) => state.activePlanetId);
   const isXRayMode = useJourneyStore((state) => state.isXRayMode);
   const toggleXRayMode = useJourneyStore((state) => state.toggleXRayMode);
+  const isOrbitMode = useJourneyStore((state) => state.isOrbitMode);
+  const toggleOrbitMode = useJourneyStore((state) => state.toggleOrbitMode);
   const isDatabaseOpen = useJourneyStore((state) => state.isDatabaseOpen);
   const toggleDatabase = useJourneyStore((state) => state.toggleDatabase);
   const setSnapping = useJourneyStore((state) => state.setSnapping);
@@ -67,6 +69,20 @@ export default function Home() {
             
             {activePlanetId && (
               <button
+                onClick={toggleOrbitMode}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
+                  isOrbitMode
+                    ? "bg-indigo-500 text-white shadow-[0_0_15px_rgba(99,102,241,0.5)]"
+                    : "bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md"
+                }`}
+              >
+                <Compass className="w-4 h-4" />
+                <span className="hidden sm:inline">{isOrbitMode ? "Hide Orbits" : "Show Orbits"}</span>
+              </button>
+            )}
+
+            {activePlanetId && (
+              <button
                 onClick={toggleDatabase}
                 className="flex items-center gap-2 px-4 py-2 rounded-full transition-all bg-indigo-600/80 hover:bg-indigo-500 text-white border border-indigo-400/50 shadow-[0_0_15px_rgba(79,70,229,0.3)] backdrop-blur-md"
               >
@@ -74,10 +90,6 @@ export default function Home() {
                 <span className="hidden sm:inline">Database</span>
               </button>
             )}
-            
-            <button className="hover:text-white hover:drop-shadow-lg transition-all hidden sm:block">
-              Mission
-            </button>
           </nav>
         </header>
 

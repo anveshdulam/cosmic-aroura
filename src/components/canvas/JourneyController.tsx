@@ -325,16 +325,15 @@ export function JourneyController() {
     camera.position.lerp(currentPoint, 0.1);
 
     // Look slightly ahead on the curve (rollercoaster effect)
-    const lookAheadTarget = t + 0.01; // reduced look-ahead due to huge scale
-    if (lookAheadTarget <= 1) {
-      const lookAtPoint = curve.getPointAt(lookAheadTarget);
+    const lookAheadTarget = Math.min(t + 0.01, 1); // Clamp to 1 so we never drift off the end
+    
+    const lookAtPoint = curve.getPointAt(lookAheadTarget);
 
-      const currentQuat = camera.quaternion.clone();
-      camera.lookAt(lookAtPoint);
-      const targetQuat = camera.quaternion.clone();
+    const currentQuat = camera.quaternion.clone();
+    camera.lookAt(lookAtPoint);
+    const targetQuat = camera.quaternion.clone();
 
-      camera.quaternion.copy(currentQuat).slerp(targetQuat, 0.1);
-    }
+    camera.quaternion.copy(currentQuat).slerp(targetQuat, 0.1);
 
     // Adjust camera far clipping plane dynamically to render massive galaxies without clipping
     if (camera.position.z < -2000) {

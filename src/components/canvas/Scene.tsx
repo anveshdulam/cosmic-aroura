@@ -23,6 +23,7 @@ import { CosmicWeb } from "./CosmicWeb";
 import { Nebula } from "./Nebula";
 import { LocalGroup } from "./LocalGroup";
 import { JourneyController, planetData } from "./JourneyController";
+import { OrbitalPaths } from "./OrbitalPaths";
 
 export default function Scene() {
   const [sunMesh, setSunMesh] = useState<THREE.Mesh | null>(null);
@@ -49,6 +50,8 @@ export default function Scene() {
               sunRef={setSunMesh}
               position={planetData[0].position as [number, number, number]}
             />
+
+            <OrbitalPaths />
 
             {planetData.map((planet) => {
               const nonPlanetIds = [

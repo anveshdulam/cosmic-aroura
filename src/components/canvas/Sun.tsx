@@ -109,6 +109,9 @@ void main() {
         finalColor = mix(color3, color4, (n - 0.66) / 0.34);
     }
     
+    // Dim the final output to strictly maintain low intensity
+    finalColor *= 0.7;
+    
     gl_FragColor = vec4(finalColor, 1.0);
 }
 `;
@@ -139,9 +142,9 @@ void main() {
     // Edges are brighter for the corona, but fade out at the extreme edge
     float glow = pow(1.0 - abs(fresnel), 2.0) * alpha;
     
-    vec3 flareColor = mix(vec3(1.0, 0.2, 0.0), vec3(1.0, 0.7, 0.1), noise);
+    vec3 flareColor = mix(vec3(0.8, 0.2, 0.0), vec3(0.9, 0.5, 0.1), noise);
     
-    gl_FragColor = vec4(flareColor, glow * 0.8);
+    gl_FragColor = vec4(flareColor, glow * 0.4); // Significantly reduced corona intensity
 }
 `;
 
