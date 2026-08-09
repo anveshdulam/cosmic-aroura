@@ -95,7 +95,7 @@ export function createMilkyWayParticleSystem(particleCount = 250000) {
   geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 
   const material = new THREE.PointsMaterial({
-    size: 0.035, // Adjust size based on scale
+    size: 0.15, // Increased size for fuller appearance
     vertexColors: true,
     transparent: true,
     opacity: 0.8,
@@ -115,8 +115,8 @@ export function MilkyWay({
   const groupRef = useRef<THREE.Group>(null);
 
   const milkyWaySystem = useMemo(() => {
-    // Generate the particle system (100,000 to balance with other elements, or 250k for max)
-    const points = createMilkyWayParticleSystem(150000);
+    // Generate the particle system (massive density increase)
+    const points = createMilkyWayParticleSystem(400000);
     // The procedural math produces points in the ~[-10, 10] range, so we scale it up massively
     points.scale.set(400, 400, 400);
     // Rotate to match our typical X-Z plane view
