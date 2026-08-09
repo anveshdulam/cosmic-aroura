@@ -32,7 +32,7 @@ export default function Scene() {
     <div className="fixed inset-0 w-full h-full z-0 bg-black">
       <Canvas
         dpr={[1, 2]}
-        camera={{ position: [0, 2, 15], fov: 45 }}
+        camera={{ position: [0, 2, 15], fov: 45, far: 20000 }}
         gl={{
           antialias: true,
           toneMapping: THREE.ACESFilmicToneMapping,
