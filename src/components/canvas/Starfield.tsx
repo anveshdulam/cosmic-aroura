@@ -13,14 +13,14 @@ export function Starfield({ count = 5000 }) {
     const scl = new Float32Array(count);
     const col = new Float32Array(count * 3);
     
-    // Star color palette (Realistic star temperatures)
+    // Star color palette (Realistic star temperatures, dimmer for low intensity)
     const starColors = [
-      new THREE.Color("#ffffff"), // White
-      new THREE.Color("#e2f0ff"), // Hot Blue
-      new THREE.Color("#ffd4a1"), // Warm Yellow
-      new THREE.Color("#ffb48a"), // Red Dwarf
-      new THREE.Color("#ffffff").multiplyScalar(0.5), // Dim white
-      new THREE.Color("#ffffff").multiplyScalar(0.2), // Very dim
+      new THREE.Color("#ffffff").multiplyScalar(0.4), // Dim White
+      new THREE.Color("#e2f0ff").multiplyScalar(0.4), // Dim Hot Blue
+      new THREE.Color("#ffd4a1").multiplyScalar(0.4), // Dim Warm Yellow
+      new THREE.Color("#ffb48a").multiplyScalar(0.3), // Dim Red Dwarf
+      new THREE.Color("#ffffff").multiplyScalar(0.2), // Very dim white
+      new THREE.Color("#ffffff").multiplyScalar(0.1), // Barely visible
     ];
 
     for (let i = 0; i < count; i++) {
@@ -89,7 +89,7 @@ export function Starfield({ count = 5000 }) {
         vertexColors={true}
         sizeAttenuation={true}
         transparent
-        opacity={1.0}
+        opacity={0.3}
         blending={THREE.AdditiveBlending}
       />
     </points>
