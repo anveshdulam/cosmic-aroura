@@ -390,7 +390,7 @@ export const planetData = [
 
 export function JourneyController() {
   const scroll = useScroll();
-  const { camera } = useThree();
+  const { camera, clock } = useThree();
   const setActivePlanet = useJourneyStore((state) => state.setActivePlanet);
   const isFocusMode = useJourneyStore((state) => state.isFocusMode);
   const activePlanetId = useJourneyStore((state) => state.activePlanetId);
@@ -493,7 +493,7 @@ export function JourneyController() {
 
   const activePlanet = planetData.find((p) => p.id === activePlanetId);
   const orbitTarget = activePlanet
-    ? getDynamicPosition(activePlanet, useThree().clock.elapsedTime)
+    ? getDynamicPosition(activePlanet, clock.elapsedTime)
     : new THREE.Vector3(0, 0, 0);
 
   return (
