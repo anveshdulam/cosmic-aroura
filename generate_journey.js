@@ -1,10 +1,21 @@
-import { useFrame, useThree } from "@react-three/fiber";
-import { useScroll, OrbitControls } from "@react-three/drei";
-import { useJourneyStore } from "@/store/journeyStore";
-import * as THREE from "three";
-import { useEffect, useRef } from "react";
+const fs = require('fs');
+const path = require('path');
 
-export const getDynamicPosition = (planet: any, time: number = 0) => {
+const srcPath = path.join(__dirname, 'src/components/canvas/JourneyController.tsx');
+let content = fs.readFileSync(srcPath, 'utf8');
+
+// 1. We will extract the existing planetData array string using regex.
+const planetDataMatch = content.match(/export const planetData = \[([\s\S]*?)\];/);
+if (!planetDataMatch) {
+  console.error("Could not find planetData array");
+  process.exit(1);
+}
+
+// 2. We don't want to parse it as JSON because it's JS code. Let's just require it.
+// Actually, it's easier to manually construct the new file since I have the descriptions.
+// Let's just generate the new file entirely in this script.
+
+const newPlanetData = `export const getDynamicPosition = (planet: any, time: number = 0) => {
   if (planet.orbitRadius && planet.orbitSpeed) {
     const angle = planet.orbitAngle + time * planet.orbitSpeed;
     const x = Math.cos(angle) * planet.orbitRadius;
@@ -386,7 +397,15 @@ export const planetData = [
       "Laniakea (Hawaiian for 'immense heaven') is the gargantuan galaxy supercluster that is home to our Milky Way. It spans an incomprehensible 500 million light-years and contains over 100,000 galaxies. Here, matter is drawn along glowing filaments of dark matter toward a mysterious gravitational anomaly known as the Great Attractor.",
   },
 ];
+`;
 
+const completeFile = `import { useFrame, useThree } from "@react-three/fiber";
+import { useScroll, OrbitControls } from "@react-three/drei";
+import { useJourneyStore } from "@/store/journeyStore";
+import * as THREE from "three";
+import { useEffect, useRef } from "react";
+
+${newPlanetData}
 
 export function JourneyController() {
   const scroll = useScroll();
@@ -500,3 +519,7 @@ export function JourneyController() {
     <>{isFocusMode && <OrbitControls enableDamping target={orbitTarget} />}</>
   );
 }
+`;
+
+fs.writeFileSync(srcPath, completeFile, 'utf8');
+console.log("Successfully rebuilt JourneyController.tsx");

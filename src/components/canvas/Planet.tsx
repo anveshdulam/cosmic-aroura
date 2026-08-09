@@ -11,6 +11,9 @@ interface PlanetProps {
   size: number;
   color: string;
   moonCount?: number;
+  orbitRadius?: number;
+  orbitSpeed?: number;
+  orbitAngle?: number;
 }
 
 export function Planet({
@@ -20,6 +23,9 @@ export function Planet({
   size,
   color,
   moonCount,
+  orbitRadius,
+  orbitSpeed,
+  orbitAngle,
 }: PlanetProps) {
   const isFocusMode = useJourneyStore((state) => state.isFocusMode);
   const isOrbitMode = useJourneyStore((state) => state.isOrbitMode);
@@ -31,8 +37,10 @@ export function Planet({
   const atmosphereRef = useRef<THREE.Mesh>(null);
   const cloudsRef = useRef<THREE.Mesh>(null);
 
-  // Load Photorealistic Textures
-  const textureUrl = `/textures/${id}.jpg`;
+  // Load Photorealistic Textures safely
+  const texturedPlanets = ["sun", "mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune"];
+  const hasTexture = texturedPlanets.includes(id);
+  const textureUrl = hasTexture ? `/textures/${id}.jpg` : "/textures/mercury.jpg"; // Safe fallback to satisfy the hook
   const [colorMap] = useTexture([textureUrl]);
 
   let cloudMap = null;
@@ -69,6 +77,14 @@ export function Planet({
     // Continuous Parallax Rotation
     if (groupRef.current) {
       groupRef.current.rotation.y += delta * 0.05;
+      
+      // Orbital Physics
+      if (orbitRadius && orbitSpeed && orbitAngle !== undefined) {
+        const angle = orbitAngle + state.clock.elapsedTime * orbitSpeed;
+        const x = Math.cos(angle) * orbitRadius;
+        const z = Math.sin(angle) * orbitRadius - 50; // Sun offset
+        groupRef.current.position.set(x, position[1], z);
+      }
     }
     if (cloudsRef.current) {
       cloudsRef.current.rotation.y += delta * 0.07;
@@ -119,9 +135,9 @@ export function Planet({
       <mesh ref={crustRef} castShadow receiveShadow>
         <sphereGeometry args={[size, 64, 64]} />
         <meshPhysicalMaterial
-          map={colorMap || undefined}
-          color={colorMap ? undefined : color}
-          bumpMap={colorMap || undefined}
+          map={hasTexture ? colorMap : undefined}
+          color={hasTexture ? undefined : color}
+          bumpMap={hasTexture ? colorMap : undefined}
           bumpScale={0.02}
           roughness={id === "earth" ? 0.4 : 0.8}
           metalness={id === "earth" ? 0.1 : 0.0}

@@ -74,6 +74,9 @@ export default function Scene() {
                   size={planet.size}
                   color={planet.color}
                   moonCount={planet.moonCount}
+                  orbitRadius={planet.orbitRadius}
+                  orbitSpeed={planet.orbitSpeed}
+                  orbitAngle={planet.orbitAngle}
                 />
               );
             })}
