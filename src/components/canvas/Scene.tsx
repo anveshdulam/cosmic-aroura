@@ -43,7 +43,7 @@ export default function Scene() {
         <Suspense fallback={null}>
           <ScrollControls pages={12} damping={0.1}>
             <JourneyController />
-            <Starfield count={15000} />
+            <Starfield count={3000} />
 
             <Sun
               sunRef={setSunMesh}
