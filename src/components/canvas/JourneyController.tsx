@@ -312,6 +312,8 @@ export function JourneyController() {
     );
   }, []);
 
+  const prevCamPos = useRef(new THREE.Vector3());
+
   useFrame((state, delta) => {
     if (isXRayMode) {
       return;
@@ -336,13 +338,22 @@ export function JourneyController() {
     camera.quaternion.copy(currentQuat).slerp(targetQuat, 0.1);
 
     // Adjust camera far clipping plane dynamically to render massive galaxies without clipping
+    const currentFar = (camera as THREE.PerspectiveCamera).far;
     if (camera.position.z < -2000) {
-      (camera as THREE.PerspectiveCamera).far = 15000;
-      camera.updateProjectionMatrix();
+      if (currentFar !== 15000) {
+        (camera as THREE.PerspectiveCamera).far = 15000;
+        camera.updateProjectionMatrix();
+      }
     } else {
-      (camera as THREE.PerspectiveCamera).far = 5000;
-      camera.updateProjectionMatrix();
+      if (currentFar !== 5000) {
+        (camera as THREE.PerspectiveCamera).far = 5000;
+        camera.updateProjectionMatrix();
+      }
     }
+
+    // Calculate camera speed to prevent HUD flicker during rapid jumps
+    const speed = delta > 0 ? camera.position.distanceTo(prevCamPos.current) / delta : 0;
+    prevCamPos.current.copy(camera.position);
 
     // Collision / Proximity detection for active planet
     let closest = planetData[0];
@@ -363,10 +374,16 @@ export function JourneyController() {
       }
     });
 
-    if (minDistance < depthScale) {
-      setActivePlanet(closest.id);
+    const isFlyingFast = speed > 1000;
+
+    if (minDistance < depthScale && !isFlyingFast) {
+      if (activePlanetId !== closest.id) {
+        setActivePlanet(closest.id);
+      }
     } else {
-      setActivePlanet(null);
+      if (activePlanetId !== null) {
+        setActivePlanet(null);
+      }
     }
   });
 
