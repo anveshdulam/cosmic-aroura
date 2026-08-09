@@ -338,6 +338,7 @@ export function Planet({
             {name}
           </div>
         </Html>
+      )}
       {/* Moon Orbits */}
       {isOrbitMode && moonsData.map((moon, index) => (
         <mesh key={`moon-orbit-${index}`} rotation-x={Math.PI / 2 + moon.inclination}>
