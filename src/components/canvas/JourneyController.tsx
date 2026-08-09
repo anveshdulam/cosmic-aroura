@@ -2,7 +2,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { useScroll, OrbitControls } from "@react-three/drei";
 import { useJourneyStore } from "@/store/journeyStore";
 import * as THREE from "three";
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useRef } from "react";
 
 export const planetData = [
   {
