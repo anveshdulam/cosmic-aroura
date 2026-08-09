@@ -305,8 +305,8 @@ export const planetScrollOffsets = planetData.map((planet) => {
     }
   }
   
-  // Nudge backward slightly so the camera stops *just before* flying past the planet
-  return Math.max(0, bestT - 0.005);
+  // Return the exact closest point
+  return bestT;
 });
 
 export function JourneyController() {
