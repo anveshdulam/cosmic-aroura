@@ -443,7 +443,7 @@ export function JourneyController() {
       if (["milkyway", "andromeda", "localgroup", "cosmicweb"].includes(planet.id)) {
         return new THREE.Vector3(0, 1000, 3000); // Pull way back for galaxies
       }
-      if (planet.id === "nebula") return new THREE.Vector3(0, 200, 500);
+      if (planet.id === "nebula") return new THREE.Vector3(0, 500, 1500);
       if (planet.id === "trappist") return new THREE.Vector3(0, 50, 150);
       if (planet.id === "kuiperbelt") return new THREE.Vector3(0, 200, 400);
       return new THREE.Vector3(planet.size * 3 + 5, planet.size + 2, planet.size * 5 + 10);
