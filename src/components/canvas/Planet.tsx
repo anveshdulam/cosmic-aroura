@@ -95,10 +95,8 @@ export function Planet({
   const moonsRef = useRef<THREE.InstancedMesh>(null);
   const tempMatrix = new THREE.Matrix4();
   
-  // Refs for zoom-dependent label fading
+  // Refs for internal labels
   const internalLabelRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const externalLabelRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const lineMaterialRefs = useRef<any[]>([]);
 
   useFrame((state, delta) => {
     // Parallax Rotation
@@ -106,8 +104,6 @@ export function Planet({
       if (!isXRayMode || !isActive) {
         groupRef.current.rotation.y += delta * 0.05;
       } else {
-        // Smoothly rotate the planet to face the camera so the X-Ray cut is perfectly visible
-        // Modulo the rotation to prevent wild spinning if it's been rotating for a while
         let currentY = groupRef.current.rotation.y % (Math.PI * 2);
         // Ensure we take the shortest path to 0
         if (currentY > Math.PI) currentY -= Math.PI * 2;
@@ -116,27 +112,6 @@ export function Planet({
         groupRef.current.rotation.y = THREE.MathUtils.lerp(currentY, 0, 0.05);
         groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, 0, 0.05);
         groupRef.current.rotation.z = THREE.MathUtils.lerp(groupRef.current.rotation.z, 0, 0.05);
-      }
-      
-      // Handle zoom-dependent label visibility
-      if (isActive && isXRayMode) {
-        const dist = state.camera.position.distanceTo(groupRef.current.position);
-        // Fade starts at 2.5x size and ends at 4x size
-        const minZoom = size * 2.5;
-        const maxZoom = size * 4.0;
-        const zoomLevel = THREE.MathUtils.clamp((dist - minZoom) / (maxZoom - minZoom), 0, 1);
-        
-        internalLabelRefs.current.forEach(ref => {
-          if (ref) ref.style.opacity = (1 - zoomLevel).toString();
-        });
-        externalLabelRefs.current.forEach(ref => {
-          if (ref) ref.style.opacity = zoomLevel.toString();
-        });
-        lineMaterialRefs.current.forEach(mat => {
-          if (mat) {
-             mat.opacity = zoomLevel * 0.8;
-          }
-        });
       }
     }
     if (cloudsRef.current) {
@@ -269,21 +244,6 @@ export function Planet({
             // Draw an elegant 3-point infographic line in the XY plane
             const angle = Math.PI / 4; // 45 degrees top-right
             
-            // Point A: On the edge of the layer
-            const startX = layer.radius * Math.cos(angle);
-            const startY = layer.radius * Math.sin(angle);
-            const startPoint = new THREE.Vector3(startX, startY, 0);
-            
-            // Point B: Diagonal bend slightly outside the layer
-            const bendRadius = layer.radius + size * 0.15;
-            const bendX = bendRadius * Math.cos(angle);
-            const bendY = bendRadius * Math.sin(angle);
-            const bendPoint = new THREE.Vector3(bendX, bendY, 0);
-            
-            // Point C: Horizontal extension to the right
-            const endX = size * 1.5;
-            const endPoint = new THREE.Vector3(endX, bendY, 0);
-            
             return (
               <mesh key={index}>
                 <sphereGeometry args={[layer.radius, 64, 64]} />
@@ -294,31 +254,11 @@ export function Planet({
                   side={index === 0 ? THREE.BackSide : THREE.FrontSide}
                 />
                 
-                {/* Infographic Line */}
-                <Line
-                  points={[startPoint, bendPoint, endPoint]}
-                  color={index === 0 ? "#888888" : index === 1 ? "#ffaa00" : "#ffffff"}
-                  lineWidth={2}
-                  transparent
-                  opacity={0.8}
-                  ref={(r: any) => { if (r && r.material) lineMaterialRefs.current[index] = r.material; }}
-                />
-
                 {/* Internal Label ON the crust (Zoomed In) */}
-                <Html position={[layer.pos * Math.cos(angle), layer.pos * Math.sin(angle), size * 0.05]} center transform sprite scale={0.005}>
+                <Html position={[layer.pos * Math.cos(angle), layer.pos * Math.sin(angle), size * 0.05]} center transform sprite scale={0.01}>
                   <div 
                     ref={el => { internalLabelRefs.current[index] = el; }} 
                     className="font-inter text-sm md:text-base font-black tracking-wider uppercase text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] pointer-events-none whitespace-nowrap"
-                  >
-                    {layer.label}
-                  </div>
-                </Html>
-
-                {/* External Label (Zoomed Out) */}
-                <Html position={[endPoint.x, endPoint.y, endPoint.z]} center zIndexRange={[100, 0]}>
-                  <div 
-                    ref={el => { externalLabelRefs.current[index] = el; }} 
-                    className={`font-inter px-3 py-1 bg-black/80 text-xs font-bold border rounded-lg pointer-events-none whitespace-nowrap shadow-[0_0_15px_rgba(0,0,0,0.8)] ${index === 0 ? 'text-gray-300 border-gray-500/50' : index === 1 ? 'text-orange-400 border-orange-500/50' : 'text-white border-white/50'}`}
                   >
                     {layer.label}
                   </div>
@@ -327,6 +267,15 @@ export function Planet({
             );
           })}
         </>
+      )}
+
+      {/* Planet Name Label (Zoomed Out) */}
+      {!isActive && (
+        <Html position={[size * 1.5, 0, 0]} center>
+          <div className="font-inter text-lg font-bold text-white/80 tracking-widest uppercase pointer-events-none whitespace-nowrap drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
+            {name}
+          </div>
+        </Html>
       )}
     </group>
   );
