@@ -263,6 +263,52 @@ export const planetData = [
   },
 ];
 
+export const journeyCurve = new THREE.CatmullRomCurve3(
+  [
+    new THREE.Vector3(0, 2, 0), // Start
+    new THREE.Vector3(12, 5, -40), // Swoop right over Sun
+    new THREE.Vector3(22, -2, -140), // Pass Mercury on left
+    new THREE.Vector3(-28, 12, -240), // Swing wide left past Venus
+    new THREE.Vector3(32, 5, -340), // Bank right past Earth
+    new THREE.Vector3(-22, -12, -440), // Dive left under Mars
+    new THREE.Vector3(55, 20, -580), // Huge arc right around Jupiter
+    new THREE.Vector3(-50, -10, -780), // Deep dive left past Saturn
+    new THREE.Vector3(30, 25, -980), // High bank over Uranus
+    new THREE.Vector3(-35, -20, -1180), // Low swoop past Neptune
+    new THREE.Vector3(0, 0, -1450), // Through Kuiper Belt
+    new THREE.Vector3(55, 25, -2400), // Swoop around TRAPPIST-1
+    new THREE.Vector3(0, 0, -4000), // Warp to Milky Way scale
+    new THREE.Vector3(0, 50, -4900), // Plunge into Galactic core
+    new THREE.Vector3(80, 40, -5900), // Fly through Nebula
+    new THREE.Vector3(-120, 80, -7300), // Fly past Andromeda
+    new THREE.Vector3(180, -80, -8800), // Fly through Local Group
+    new THREE.Vector3(0, 0, -10900), // Enter Cosmic Web (Laniakea)
+    new THREE.Vector3(0, 0, -11200), // Infinity
+  ],
+  false,
+  "catmullrom",
+  0.5,
+);
+
+export const planetScrollOffsets = planetData.map((planet) => {
+  let bestT = 0;
+  let minDistance = Infinity;
+  const pPos = new THREE.Vector3(...(planet.position as [number, number, number]));
+  
+  for (let i = 0; i <= 2000; i++) {
+    const t = i / 2000;
+    const point = journeyCurve.getPointAt(t);
+    const dist = point.distanceTo(pPos);
+    if (dist < minDistance) {
+      minDistance = dist;
+      bestT = t;
+    }
+  }
+  
+  // Nudge backward slightly so the camera stops *just before* flying past the planet
+  return Math.max(0, bestT - 0.005);
+});
+
 export function JourneyController() {
   const scroll = useScroll();
   const { camera } = useThree();
@@ -282,36 +328,6 @@ export function JourneyController() {
     });
   }, [scroll, setScrollTo]);
 
-  // Cinematic 3D Spline Curve for Camera
-  const curve = useMemo(() => {
-    return new THREE.CatmullRomCurve3(
-      [
-        new THREE.Vector3(0, 2, 0), // Start
-        new THREE.Vector3(12, 5, -40), // Swoop right over Sun
-        new THREE.Vector3(22, -2, -140), // Pass Mercury on left
-        new THREE.Vector3(-28, 12, -240), // Swing wide left past Venus
-        new THREE.Vector3(32, 5, -340), // Bank right past Earth
-        new THREE.Vector3(-22, -12, -440), // Dive left under Mars
-        new THREE.Vector3(55, 20, -580), // Huge arc right around Jupiter
-        new THREE.Vector3(-50, -10, -780), // Deep dive left past Saturn
-        new THREE.Vector3(30, 25, -980), // High bank over Uranus
-        new THREE.Vector3(-35, -20, -1180), // Low swoop past Neptune
-        new THREE.Vector3(0, 0, -1450), // Through Kuiper Belt
-        new THREE.Vector3(55, 25, -2400), // Swoop around TRAPPIST-1
-        new THREE.Vector3(0, 0, -4000), // Warp to Milky Way scale
-        new THREE.Vector3(0, 50, -4900), // Plunge into Galactic core
-        new THREE.Vector3(80, 40, -5900), // Fly through Nebula
-        new THREE.Vector3(-120, 80, -7300), // Fly past Andromeda
-        new THREE.Vector3(180, -80, -8800), // Fly through Local Group
-        new THREE.Vector3(0, 0, -10900), // Enter Cosmic Web (Laniakea)
-        new THREE.Vector3(0, 0, -11200), // Infinity
-      ],
-      false,
-      "catmullrom",
-      0.5,
-    );
-  }, []);
-
   const prevCamPos = useRef(new THREE.Vector3());
 
   useFrame((state, delta) => {
@@ -323,13 +339,13 @@ export function JourneyController() {
     const t = scroll.offset;
 
     // Position camera on the curve
-    const currentPoint = curve.getPointAt(t);
+    const currentPoint = journeyCurve.getPointAt(t);
     camera.position.lerp(currentPoint, 0.1);
 
     // Look slightly ahead on the curve (rollercoaster effect)
     const lookAheadTarget = Math.min(t + 0.01, 1); // Clamp to 1 so we never drift off the end
     
-    const lookAtPoint = curve.getPointAt(lookAheadTarget);
+    const lookAtPoint = journeyCurve.getPointAt(lookAheadTarget);
 
     const currentQuat = camera.quaternion.clone();
     camera.lookAt(lookAtPoint);

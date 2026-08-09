@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useJourneyStore } from "@/store/journeyStore";
-import { planetData } from "@/components/canvas/JourneyController";
+import { planetData, planetScrollOffsets } from "@/components/canvas/JourneyController";
 import { Telescope, Layers, Compass, ExternalLink, X } from "lucide-react";
 import ThanosParticles from "@/components/ui/ThanosParticles";
 import { motion, AnimatePresence } from "framer-motion";
@@ -183,7 +183,7 @@ export default function Home() {
                 key={planet.id}
                 onClick={() => {
                   if (scrollTo) {
-                    scrollTo(i / (planetData.length - 1));
+                    scrollTo(planetScrollOffsets[i]);
                   }
                 }}
                 className="flex items-center gap-4 justify-start group cursor-pointer pointer-events-auto"
