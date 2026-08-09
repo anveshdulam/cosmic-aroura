@@ -8,17 +8,37 @@ export function Starfield({ count = 5000 }) {
   const materialRef = useRef<THREE.PointsMaterial>(null);
   const scroll = useScroll(); // Access the scroll state
 
-  const [positions, scales] = useMemo(() => {
+  const [positions, scales, colors] = useMemo(() => {
     const pos = new Float32Array(count * 3);
     const scl = new Float32Array(count);
+    const col = new Float32Array(count * 3);
+    
+    // Star color palette (Realistic star temperatures)
+    const starColors = [
+      new THREE.Color("#ffffff"), // White
+      new THREE.Color("#e2f0ff"), // Hot Blue
+      new THREE.Color("#ffd4a1"), // Warm Yellow
+      new THREE.Color("#ffb48a"), // Red Dwarf
+      new THREE.Color("#ffffff").multiplyScalar(0.5), // Dim white
+      new THREE.Color("#ffffff").multiplyScalar(0.2), // Very dim
+    ];
+
     for (let i = 0; i < count; i++) {
       // Spread stars over a massive area
-      pos[i * 3] = (Math.random() - 0.5) * 2000;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 2000;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 5000; // Deep Z axis
-      scl[i] = Math.random() + 0.5; // Make them slightly larger baseline
+      pos[i * 3] = (Math.random() - 0.5) * 4000;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 4000;
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 6000; // Deep Z axis
+      
+      // Make most stars small, very few large ones
+      scl[i] = Math.random() > 0.95 ? (Math.random() * 2.0 + 1.0) : Math.random() * 0.5 + 0.1;
+      
+      // Assign random realistic color
+      const color = starColors[Math.floor(Math.random() * starColors.length)];
+      col[i * 3] = color.r;
+      col[i * 3 + 1] = color.g;
+      col[i * 3 + 2] = color.b;
     }
-    return [pos, scl];
+    return [pos, scl, col];
   }, [count]);
 
   useFrame((state, delta) => {
@@ -55,14 +75,21 @@ export function Starfield({ count = 5000 }) {
           array={scales}
           itemSize={1}
         />
+        {/* @ts-ignore */}
+        <bufferAttribute
+          attach="attributes-color"
+          count={count}
+          array={colors}
+          itemSize={3}
+        />
       </bufferGeometry>
       <pointsMaterial
         ref={materialRef}
-        size={3.5}
-        color="#ffffff"
+        size={2.5}
+        vertexColors={true}
         sizeAttenuation={true}
         transparent
-        opacity={0.9}
+        opacity={1.0}
         blending={THREE.AdditiveBlending}
       />
     </points>

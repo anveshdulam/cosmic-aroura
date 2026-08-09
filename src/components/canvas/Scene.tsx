@@ -9,22 +9,8 @@ import {
   Noise,
   GodRays,
 } from "@react-three/postprocessing";
-import { Environment, useTexture } from "@react-three/drei";
 import { Suspense, useState, useEffect } from "react";
 import * as THREE from "three";
-
-function GalaxyBackground() {
-  const texture = useTexture("/textures/galaxy_panorama.png");
-  
-  useEffect(() => {
-    if (texture) {
-      texture.mapping = THREE.EquirectangularReflectionMapping;
-      texture.colorSpace = THREE.SRGBColorSpace;
-    }
-  }, [texture]);
-
-  return <Environment background map={texture} />;
-}
 import { Sun } from "./Sun";
 import { Planet } from "./Planet";
 import { Starfield } from "./Starfield";
@@ -53,11 +39,11 @@ export default function Scene() {
           localClippingEnabled: true,
         }}
       >
+        <color attach="background" args={["#000000"]} />
         <Suspense fallback={null}>
-          <GalaxyBackground />
           <ScrollControls pages={12} damping={0.1}>
             <JourneyController />
-            <Starfield count={5000} />
+            <Starfield count={15000} />
 
             <Sun
               sunRef={setSunMesh}
