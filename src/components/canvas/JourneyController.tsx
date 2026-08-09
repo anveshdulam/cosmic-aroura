@@ -321,8 +321,10 @@ export function JourneyController() {
     // Register the smooth scrolling function to the global store
     setScrollTo((offset: number) => {
       // scroll.el is the DOM element created by ScrollControls
+      // max scrollable distance is scrollHeight - clientHeight
+      const maxScroll = scroll.el.scrollHeight - scroll.el.clientHeight;
       scroll.el.scrollTo({
-        top: offset * scroll.el.scrollHeight,
+        top: offset * maxScroll,
         behavior: "smooth",
       });
     });
