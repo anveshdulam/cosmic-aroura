@@ -9,6 +9,7 @@ import {
   Noise,
   GodRays,
 } from "@react-three/postprocessing";
+import { Environment } from "@react-three/drei";
 import { Suspense, useState } from "react";
 import * as THREE from "three";
 import { Sun } from "./Sun";
@@ -39,8 +40,9 @@ export default function Scene() {
           localClippingEnabled: true,
         }}
       >
-        <color attach="background" args={["#020205"]} />
-
+        {/* The generated high-res galaxy background */}
+        <Environment background files="/textures/galaxy_panorama.png" />
+        
         <Suspense fallback={null}>
           <ScrollControls pages={12} damping={0.1}>
             <JourneyController />

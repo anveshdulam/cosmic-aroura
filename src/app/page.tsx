@@ -64,11 +64,19 @@ export default function Home() {
                 <span className="hidden sm:inline">{isXRayMode ? "Disable X-Ray" : "X-Ray Mode"}</span>
               </button>
             )}
+            
+            {activePlanetId && (
+              <button
+                onClick={toggleDatabase}
+                className="flex items-center gap-2 px-4 py-2 rounded-full transition-all bg-indigo-600/80 hover:bg-indigo-500 text-white border border-indigo-400/50 shadow-[0_0_15px_rgba(79,70,229,0.3)] backdrop-blur-md"
+              >
+                <ExternalLink className="w-4 h-4" />
+                <span className="hidden sm:inline">Database</span>
+              </button>
+            )}
+            
             <button className="hover:text-white hover:drop-shadow-lg transition-all hidden sm:block">
               Mission
-            </button>
-            <button className="hover:text-white hover:drop-shadow-lg transition-all hidden sm:block">
-              Database
             </button>
           </nav>
         </header>
@@ -94,16 +102,6 @@ export default function Home() {
 
               {/* Action Buttons */}
               <div className="mt-8 flex flex-wrap gap-4">
-
-                {activePlanetId && (
-                  <button
-                    onClick={toggleDatabase}
-                    className="flex items-center gap-2 px-6 py-3 rounded-full font-inter text-sm font-bold tracking-wide transition-all bg-indigo-600/80 hover:bg-indigo-500 text-white backdrop-blur-md border border-indigo-400/50 shadow-[0_0_15px_rgba(79,70,229,0.3)] hover:shadow-[0_0_25px_rgba(79,70,229,0.6)] w-fit"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    Access Database
-                  </button>
-                )}
               </div>
             </div>
 

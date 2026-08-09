@@ -94,6 +94,11 @@ export function Planet({
 
   const moonsRef = useRef<THREE.InstancedMesh>(null);
   const tempMatrix = new THREE.Matrix4();
+  
+  // Refs for zoom-dependent label fading
+  const internalLabelRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const externalLabelRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const lineMaterialRefs = useRef<any[]>([]);
 
   useFrame((state, delta) => {
     // Parallax Rotation
@@ -111,6 +116,27 @@ export function Planet({
         groupRef.current.rotation.y = THREE.MathUtils.lerp(currentY, 0, 0.05);
         groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, 0, 0.05);
         groupRef.current.rotation.z = THREE.MathUtils.lerp(groupRef.current.rotation.z, 0, 0.05);
+      }
+      
+      // Handle zoom-dependent label visibility
+      if (isActive && isXRayMode) {
+        const dist = state.camera.position.distanceTo(groupRef.current.position);
+        // Fade starts at 2.5x size and ends at 4x size
+        const minZoom = size * 2.5;
+        const maxZoom = size * 4.0;
+        const zoomLevel = THREE.MathUtils.clamp((dist - minZoom) / (maxZoom - minZoom), 0, 1);
+        
+        internalLabelRefs.current.forEach(ref => {
+          if (ref) ref.style.opacity = (1 - zoomLevel).toString();
+        });
+        externalLabelRefs.current.forEach(ref => {
+          if (ref) ref.style.opacity = zoomLevel.toString();
+        });
+        lineMaterialRefs.current.forEach(mat => {
+          if (mat) {
+             mat.opacity = zoomLevel * 0.8;
+          }
+        });
       }
     }
     if (cloudsRef.current) {
@@ -275,11 +301,25 @@ export function Planet({
                   lineWidth={2}
                   transparent
                   opacity={0.8}
+                  ref={(r: any) => { if (r && r.material) lineMaterialRefs.current[index] = r.material; }}
                 />
 
-                {/* External Label (CSS3D for perfect alignment) */}
+                {/* Internal Label ON the crust (Zoomed In) */}
+                <Html position={[layer.pos * Math.cos(angle), layer.pos * Math.sin(angle), size * 0.05]} center transform sprite distanceFactor={50}>
+                  <div 
+                    ref={el => { internalLabelRefs.current[index] = el; }} 
+                    className="text-sm md:text-base font-black tracking-wider uppercase text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] pointer-events-none whitespace-nowrap"
+                  >
+                    {layer.label}
+                  </div>
+                </Html>
+
+                {/* External Label (Zoomed Out) */}
                 <Html position={[endPoint.x, endPoint.y, endPoint.z]} center transform sprite distanceFactor={50}>
-                  <div className={`px-4 py-1.5 bg-black/80 text-sm font-bold border rounded-lg pointer-events-none whitespace-nowrap shadow-[0_0_15px_rgba(0,0,0,0.8)] ${index === 0 ? 'text-gray-300 border-gray-500/50' : index === 1 ? 'text-orange-400 border-orange-500/50' : 'text-white border-white/50'}`}>
+                  <div 
+                    ref={el => { externalLabelRefs.current[index] = el; }} 
+                    className={`px-4 py-1.5 bg-black/80 text-sm font-bold border rounded-lg pointer-events-none whitespace-nowrap shadow-[0_0_15px_rgba(0,0,0,0.8)] ${index === 0 ? 'text-gray-300 border-gray-500/50' : index === 1 ? 'text-orange-400 border-orange-500/50' : 'text-white border-white/50'}`}
+                  >
                     {layer.label}
                   </div>
                 </Html>
